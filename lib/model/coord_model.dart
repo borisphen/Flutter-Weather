@@ -4,8 +4,8 @@ class Coord {
   double _lat;
 
   Coord(parsedJson) {
-    _lon = parsedJson['lon'];
-    _lat = parsedJson['lat'];
+    _lon = parsedJson['lon'] * 1.0;
+    _lat = parsedJson['lat'] * 1.0;
   }
 
   double get lat => _lat;

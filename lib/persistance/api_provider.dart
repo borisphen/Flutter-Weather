@@ -5,7 +5,7 @@ import 'package:http/http.dart' show Client;
 class ApiProvider {
   Client client = Client();
   final _baseUrl =
-      "https://samples.openweathermap.org/data/2.5/weather?q=London,uk&appid=b6907d289e10d714a6e88b30761fae22";
+      "https://api.openweathermap.org/data/2.5/weather?q=Kharkiv,UA&appid=b4f1ce98c8299eae7983989d138f01ab";
 
   Future<WeatherResponse> fetchLondonWeather() async {
     final response = await client.get("$_baseUrl");
@@ -14,7 +14,7 @@ class ApiProvider {
     if (response.statusCode == 200) {
       return WeatherResponse.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to load weather');
+      return null;
     }
   }
 }

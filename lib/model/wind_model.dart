@@ -5,7 +5,7 @@ class Wind {
 
   Wind(parsedJson) {
     _deg = parsedJson['deg'];
-    _speed = parsedJson['speed'];
+    _speed = parsedJson['speed'] * 1.0;
   }
 
   int get deg => _deg;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'file:///D:/Bender/Development/Projects/flutter_weather/lib/bloc/weather_state.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_weather/bloc/weather_bloc.dart';
 import 'package:flutter_weather/model/coord_model.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_weather/model/main_model.dart';
 import 'package:flutter_weather/model/sys_model.dart';
 import 'package:flutter_weather/model/weather_response_model.dart';
 import 'package:flutter_weather/model/wind_model.dart';
+import 'package:provider/provider.dart';
 
 class WeatherScreen extends StatefulWidget {
   @override
@@ -14,20 +16,36 @@ class WeatherScreen extends StatefulWidget {
 
 class WeatherScreenState extends State<WeatherScreen> {
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   weatherBloc.fetchLondonWeather();
+  //   return StreamBuilder(
+  //       stream: weatherBloc.weather,
+  //       builder: (context, AsyncSnapshot<WeatherResponse> snapshot) {
+  //         if (snapshot.hasData) {
+  //           return _buildWeatherScreen(snapshot.data);
+  //         } else if (snapshot.hasError) {
+  //           return Text(snapshot.error.toString());
+  //         }
+  //         return Center(child: CircularProgressIndicator());
+  //       });
+  // }
+
   @override
   Widget build(BuildContext context) {
-    weatherBloc.fetchLondonWeather();
-    return StreamBuilder(
-        stream: weatherBloc.weather,
-        builder: (context, AsyncSnapshot<WeatherResponse> snapshot) {
-          if (snapshot.hasData) {
-            return _buildWeatherScreen(snapshot.data);
-          } else if (snapshot.hasError) {
-            return Text(snapshot.error.toString());
+    // weatherBloc.fetchLondonWeather();
+    weatherProvider.fetchWeather();
+    return Consumer<WeatherState>(
+        builder: (context, weather, child) {
+          if (weather.weatherResponse != null) {
+            return _buildWeatherScreen(weather.weatherResponse);
+          } else {
+            return Text('Oops smth goes wrong!');
           }
           return Center(child: CircularProgressIndicator());
         });
   }
+
   Container _buildWeatherScreen(WeatherResponse data) {
     return Container(
       padding: const EdgeInsets.all(17.0),
