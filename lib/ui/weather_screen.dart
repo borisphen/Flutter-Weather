@@ -34,13 +34,14 @@ class WeatherScreenState extends State<WeatherScreen> {
   @override
   Widget build(BuildContext context) {
     // weatherBloc.fetchLondonWeather();
-    weatherProvider.fetchWeather();
+    // weatherProvider.fetchWeather();
+    weatherProvider.getCurrentLocation();
     return Consumer<WeatherState>(
         builder: (context, weather, child) {
           if (weather.weatherResponse != null) {
             return _buildWeatherScreen(weather.weatherResponse);
           } else {
-            return Text('Oops smth goes wrong!');
+            return Center(child: Text('Oops smth goes wrong!'));
           }
           return Center(child: CircularProgressIndicator());
         });
