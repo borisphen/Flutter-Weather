@@ -1,4 +1,4 @@
-import 'package:flutter_weather/model/weather_response_model.dart';
+import 'package:flutter_weather/model/weather/weather_response_model.dart';
 import 'package:flutter_weather/persistance/repository.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -9,10 +9,10 @@ class WeatherBloc {
 
   Observable<WeatherResponse> get weather => _weatherFetcher.stream;
 
-  fetchLondonWeather() async {
-    WeatherResponse weatherResponse = await _repository.fetchLondonWeather();
-    _weatherFetcher.sink.add(weatherResponse);
-  }
+  // fetchLondonWeather() async {
+  //   WeatherResponse weatherResponse = await _repository.fetchLondonWeather();
+  //   _weatherFetcher.sink.add(weatherResponse);
+  // }
 
   dispose() {
     _weatherFetcher.close();

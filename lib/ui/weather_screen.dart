@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'file:///D:/Bender/Development/Projects/flutter_weather/lib/bloc/weather_state.dart';
+import 'package:flutter_weather/bloc/places_state.dart';
+import 'package:flutter_weather/model/weather/coord_model.dart';
+import 'package:flutter_weather/model/weather/main_model.dart';
+import 'package:flutter_weather/model/weather/sys_model.dart';
+import 'package:flutter_weather/model/weather/weather_response_model.dart';
+import 'package:flutter_weather/model/weather/wind_model.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_weather/bloc/weather_bloc.dart';
-import 'package:flutter_weather/model/coord_model.dart';
-import 'package:flutter_weather/model/main_model.dart';
-import 'package:flutter_weather/model/sys_model.dart';
-import 'package:flutter_weather/model/weather_response_model.dart';
-import 'package:flutter_weather/model/wind_model.dart';
 import 'package:provider/provider.dart';
 
 class WeatherScreen extends StatefulWidget {
@@ -35,7 +35,9 @@ class WeatherScreenState extends State<WeatherScreen> {
   Widget build(BuildContext context) {
     // weatherBloc.fetchLondonWeather();
     // weatherProvider.fetchWeather();
+    final weatherProvider = Provider.of<WeatherState>(context, listen: false);
     weatherProvider.getCurrentLocation();
+    weatherProvider.loadCitiesList();
     return Consumer<WeatherState>(
         builder: (context, weather, child) {
           if (weather.weatherResponse != null) {

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'file:///D:/Bender/Development/Projects/flutter_weather/lib/bloc/weather_state.dart';
+import 'package:flutter_weather/bloc/places_state.dart';
 import 'package:flutter_weather/ui/weather_screen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 void main() {
   runApp(ChangeNotifierProvider<WeatherState>(
-    create: (context) => weatherProvider,
-    child: MyApp(),
+    create: (context) => WeatherState(),
+    builder: (context, child) {
+      return  MyApp();
+    },
   ));
 }
 

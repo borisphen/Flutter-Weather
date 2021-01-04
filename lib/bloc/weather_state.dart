@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/model/weather_response_model.dart';
+import 'package:flutter_weather/model/weather/weather_response_model.dart';
 import 'package:flutter_weather/persistance/repository.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -9,10 +9,10 @@ class WeatherState extends ChangeNotifier {
   final Repository _repository = Repository();
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
-  fetchWeather() async {
-    weatherResponse = await _repository.fetchLondonWeather();
-    notifyListeners();
-  }
+  // fetchWeather() async {
+  //   weatherResponse = await _repository.fetchLondonWeather();
+  //   notifyListeners();
+  // }
 
   getCurrentLocation() async {
     geolocator
@@ -23,6 +23,12 @@ class WeatherState extends ChangeNotifier {
       notifyListeners();
     });
   }
+
+  Future<int> getCurrentPlaceCode() => _repository.getCurrentPlaceCode();
+
+  saveCurrentPlaceCode(int code) => _repository.saveCurrentPlaceCode(code);
+
+  Future<String> getCitiesList() => _repository.loadCitiesList();
 }
 
 final weatherProvider = WeatherState();

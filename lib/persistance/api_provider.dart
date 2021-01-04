@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter_weather/model/weather_response_model.dart';
+import 'package:flutter_weather/model/weather/weather_response_model.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' show Client;
 
@@ -11,19 +11,19 @@ final dataPath = '/data/2.5/weather';
 
 class ApiProvider {
   Client client = Client();
-  final url = "$_baseUrl/data/2.5/weather?q=Kharkiv,UA&appid=b4f1ce98c8299eae7983989d138f01ab";
+  // final url = "$_baseUrl/data/2.5/weather?q=Kharkiv,UA&appid=b4f1ce98c8299eae7983989d138f01ab";
 
 
-  Future<WeatherResponse> fetchLondonWeather() async {
-    final response = await client.get("$url");
-    print(response.body.toString());
-
-    if (response.statusCode == 200) {
-      return WeatherResponse.fromJson(json.decode(response.body));
-    } else {
-      return null;
-    }
-  }
+  // Future<WeatherResponse> fetchLondonWeather() async {
+  //   final response = await client.get("$url");
+  //   print(response.body.toString());
+  //
+  //   if (response.statusCode == 200) {
+  //     return WeatherResponse.fromJson(json.decode(response.body));
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   // Map<String, String> getQueryParams() {
   //   var queryParameters = {
