@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/bloc/places_state.dart';
+import 'package:flutter_weather/ui/cities_finder.dart';
 import 'package:flutter_weather/ui/weather_screen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
@@ -50,7 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WeatherScreen(),
+      // body: WeatherScreen(),
+      body: CitiesFinder(),
     );
   }
 }

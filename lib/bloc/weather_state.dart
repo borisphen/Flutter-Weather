@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/model/city/city_model.dart';
 import 'package:flutter_weather/model/weather/weather_response_model.dart';
 import 'package:flutter_weather/persistance/repository.dart';
 import 'package:geolocator/geolocator.dart';
@@ -6,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 class WeatherState extends ChangeNotifier {
   WeatherResponse weatherResponse;
   Position currentPosition;
+  CityModel selectedCity;
   final Repository _repository = Repository();
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
@@ -24,11 +26,16 @@ class WeatherState extends ChangeNotifier {
     });
   }
 
+  selectCity(CityModel cityModel) {
+    selectedCity = cityModel;
+    notifyListeners();
+  }
+
   Future<int> getCurrentPlaceCode() => _repository.getCurrentPlaceCode();
 
   saveCurrentPlaceCode(int code) => _repository.saveCurrentPlaceCode(code);
 
-  Future<String> getCitiesList() => _repository.loadCitiesList();
+  Future<List<CityModel>> getCitiesList() => _repository.loadCitiesList();
 }
 
 final weatherProvider = WeatherState();

@@ -1,4 +1,5 @@
 import 'package:flutter_weather/model/city/cities_model.dart';
+import 'package:flutter_weather/model/city/city_model.dart';
 import 'package:flutter_weather/model/weather/weather_response_model.dart';
 import 'package:flutter_weather/persistance/assets_provider.dart';
 import 'package:flutter_weather/persistance/prefs_provider.dart';
@@ -20,5 +21,5 @@ class Repository {
 
   saveCurrentPlaceCode(int code) => _prefsProvider.saveCurrentPlaceCode(code);
 
-  Future<CitiesModel> loadCitiesList() => _assetsProvider.loadCitiesList();
+  Future<List<CityModel>> loadCitiesList() => _assetsProvider.loadCitiesList();
 }
