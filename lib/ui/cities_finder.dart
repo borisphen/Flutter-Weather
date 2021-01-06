@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:flutter_weather/bloc/places_state.dart';
+import 'package:flutter_weather/bloc/weather_state.dart';
+
 import 'package:flutter_weather/model/city/city_model.dart';
 import 'package:provider/provider.dart';
 
@@ -36,6 +37,8 @@ class CitiesFinder extends StatelessWidget {
             },
             onSuggestionSelected: (suggestion) {
               this._typeAheadController.text = (suggestion as CityModel).name;
+              weatherProvider.selectCity(suggestion);
+              Navigator.of(context).pop();
             }),
       ),
     );

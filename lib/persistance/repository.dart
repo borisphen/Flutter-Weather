@@ -14,8 +14,8 @@ class Repository {
   // Future<WeatherResponse> fetchLondonWeather() =>
   //     appApiProvider.fetchLondonWeather();
 
-  Future<WeatherResponse> fetchWeatherByLocation(Position position) =>
-      _appApiProvider.fetchWeatherByLocation(position);
+  Future<WeatherResponse> fetchWeatherByLocation(double latitude, double longitude) =>
+      _appApiProvider.fetchWeatherByLocation(latitude, longitude);
 
   Future<int> getCurrentPlaceCode() => _prefsProvider.getCurrentPlaceCode();
 

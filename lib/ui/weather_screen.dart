@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/bloc/places_state.dart';
+import 'package:flutter_weather/bloc/weather_state.dart';
 import 'package:flutter_weather/model/weather/coord_model.dart';
 import 'package:flutter_weather/model/weather/main_model.dart';
 import 'package:flutter_weather/model/weather/sys_model.dart';
@@ -31,13 +31,12 @@ class WeatherScreenState extends State<WeatherScreen> {
   //       });
   // }
 
+
+
   @override
   Widget build(BuildContext context) {
     // weatherBloc.fetchLondonWeather();
     // weatherProvider.fetchWeather();
-    final weatherProvider = Provider.of<WeatherState>(context, listen: false);
-    weatherProvider.getCurrentLocation();
-    weatherProvider.loadCitiesList();
     return Consumer<WeatherState>(
         builder: (context, weather, child) {
           if (weather.weatherResponse != null) {
@@ -180,5 +179,13 @@ class WeatherScreenState extends State<WeatherScreen> {
   void dispose() {
     super.dispose();
     weatherBloc.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final weatherProvider = Provider.of<WeatherState>(context, listen: false);
+    weatherProvider.getCurrentLocation();
+    weatherProvider.loadCitiesList();
   }
 }

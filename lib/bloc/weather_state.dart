@@ -8,6 +8,7 @@ class WeatherState extends ChangeNotifier {
   WeatherResponse weatherResponse;
   Position currentPosition;
   CityModel selectedCity;
+  List<CityModel> cities;
   final Repository _repository = Repository();
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
@@ -21,14 +22,35 @@ class WeatherState extends ChangeNotifier {
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) async {
       currentPosition = position;
-      weatherResponse = await _repository.fetchWeatherByLocation(position);
+      weatherResponse =
+          await _getWeatherByPosition(position.latitude, position.longitude);
       notifyListeners();
     });
   }
 
-  selectCity(CityModel cityModel) {
+  Future<WeatherResponse> _getWeatherByPosition(double lat, double lon) async {
+    return _repository.fetchWeatherByLocation(lat, lon);
+  }
+
+  selectCity(CityModel cityModel) async {
     selectedCity = cityModel;
+    weatherResponse = await _getWeatherByPosition(
+        cityModel.coordModel.lat, cityModel.coordModel.lon);
     notifyListeners();
+  }
+
+  loadCitiesList() async {
+    if (cities == null) {
+      cities = await _repository.loadCitiesList();
+    }
+  }
+
+  List<CityModel> getSuggestions(String query) {
+    List<CityModel> matches = [];
+    matches.addAll(cities);
+    matches
+        .retainWhere((s) => s.name.toLowerCase().contains(query.toLowerCase()));
+    return matches;
   }
 
   Future<int> getCurrentPlaceCode() => _repository.getCurrentPlaceCode();
@@ -38,4 +60,4 @@ class WeatherState extends ChangeNotifier {
   Future<List<CityModel>> getCitiesList() => _repository.loadCitiesList();
 }
 
-final weatherProvider = WeatherState();
+// final weatherProvider = WeatherState();

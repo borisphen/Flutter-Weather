@@ -32,10 +32,10 @@ class ApiProvider {
   //   };
   // }
 
-  String _getWeatherUrlByLocation(Position position) {
+  String _getWeatherUrlByLocation(double latitude, double longitude) {
       var queryParameters = {
-        'lat': position.latitude.toString(),
-        'lon': position.longitude.toString(),
+        'lat': latitude.toString(),
+        'lon': longitude.toString(),
         'appid': _apiKey,
       };
       var uri = Uri.https(_baseHttpsUrl, dataPath, queryParameters);
@@ -43,8 +43,8 @@ class ApiProvider {
       return uri.toString();
   }
 
-  Future<WeatherResponse> fetchWeatherByLocation(Position position) async {
-    final response = await client.get(_getWeatherUrlByLocation(position));
+  Future<WeatherResponse> fetchWeatherByLocation(double latitude, double longitude) async {
+    final response = await client.get(_getWeatherUrlByLocation(latitude, longitude));
     print(response.body.toString());
 
     if (response.statusCode == 200) {

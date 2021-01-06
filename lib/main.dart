@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/bloc/places_state.dart';
+
 import 'package:flutter_weather/ui/cities_finder.dart';
 import 'package:flutter_weather/ui/weather_screen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+
+import 'bloc/weather_state.dart';
 
 void main() {
   runApp(ChangeNotifierProvider<WeatherState>(
@@ -35,13 +37,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      // home: MyHomePage(),
+      routes: {
+        Navigator.defaultRouteName: (context) => MyHomePage(title: "Weather App"),
+        '/finder': (context) => CitiesFinder(),
+        // '/details': (context) => DetailsPage()
+      },
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key}) : super(key: key);
+  final String title;
+  MyHomePage({Key key, this.title}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -51,8 +59,17 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // body: WeatherScreen(),
-      body: CitiesFinder(),
+      appBar: AppBar(
+        title: Text(widget.title),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.find_in_page),
+            onPressed: () => Navigator.pushNamed(context, '/finder'),
+          )
+        ],
+      ),
+      body: WeatherScreen(),
+      // body: CitiesFinder(),
     );
   }
 }
