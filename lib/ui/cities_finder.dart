@@ -11,7 +11,7 @@ class CitiesFinder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final weatherProvider = Provider.of<WeatherState>(context, listen: false);
-    weatherProvider.loadCitiesList();
+    // weatherProvider.loadCitiesList();
     return Scaffold(
       appBar: AppBar(
         title: Text('City finder'),

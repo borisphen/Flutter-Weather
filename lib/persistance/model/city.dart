@@ -1,21 +1,23 @@
 import 'package:flutter_weather/model/city/coord_model.dart';
 
-class CityModel {
+class City {
   int id;
   String name;
   String state;
   String country;
-  CoordModel coordModel;
+  double lon;
+  double lat;
 
-  CityModel.fromJson(Map<String, dynamic> parsedJson) {
+  City.fromMap(Map<String, dynamic> parsedJson) {
     print(parsedJson);
     try {
       //several ids are double
-      id = (parsedJson['id'] is int) ? parsedJson['id'] : (parsedJson['id'] as double).toInt();
+      id = parsedJson['id'];
       name = parsedJson['name'];
       state = parsedJson['state'];
       country = parsedJson['country'];
-      coordModel = CoordModel(parsedJson['coord']);
+      lat = parsedJson['lat'];
+      lon = parsedJson['lon'];
     } catch (e) {
       print(e.toString());
     }
@@ -26,7 +28,7 @@ class CityModel {
     "name": name,
     "state": state,
     "country": country,
-    "lat": coordModel.lat,
-    "lon": coordModel.lon,
+    "lat": lat,
+    "lon": lon,
   };
 }

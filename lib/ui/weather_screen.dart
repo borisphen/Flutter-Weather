@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/bloc/weather_state.dart';
 import 'package:flutter_weather/model/weather/coord_model.dart';
@@ -187,5 +188,8 @@ class WeatherScreenState extends State<WeatherScreen> {
     final weatherProvider = Provider.of<WeatherState>(context, listen: false);
     weatherProvider.getCurrentLocation();
     weatherProvider.loadCitiesList();
+    // compute (null, weatherProvider.loadCitiesList());
   }
+
+
 }

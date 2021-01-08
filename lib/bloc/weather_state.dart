@@ -40,8 +40,10 @@ class WeatherState extends ChangeNotifier {
   }
 
   loadCitiesList() async {
-    if (cities == null) {
-      cities = await _repository.loadCitiesList();
+    bool isDbHasCities = await _repository.isCityTableNotEmpty();
+    if (!isDbHasCities) {
+      await _repository.loadCitiesList().then((value) =>
+          _repository.insertCities(value));
     }
   }
 
@@ -58,6 +60,8 @@ class WeatherState extends ChangeNotifier {
   saveCurrentPlaceCode(int code) => _repository.saveCurrentPlaceCode(code);
 
   Future<List<CityModel>> getCitiesList() => _repository.loadCitiesList();
+
+  Future<bool> isCityTableNotEmpty() => _repository.isCityTableNotEmpty();
 }
 
 // final weatherProvider = WeatherState();
