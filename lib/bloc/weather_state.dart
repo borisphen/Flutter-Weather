@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/model/city/city_model.dart';
 import 'package:flutter_weather/model/weather/weather_response_model.dart';
+import 'package:flutter_weather/persistance/model/city.dart';
 import 'package:flutter_weather/persistance/repository.dart';
 import 'package:geolocator/geolocator.dart';
 
 class WeatherState extends ChangeNotifier {
   WeatherResponse weatherResponse;
   Position currentPosition;
-  CityModel selectedCity;
-  List<CityModel> cities;
+  City selectedCity;
+  List<CityModel> favoriteCities;
   final Repository _repository = Repository();
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
@@ -32,10 +33,12 @@ class WeatherState extends ChangeNotifier {
     return _repository.fetchWeatherByLocation(lat, lon);
   }
 
-  selectCity(CityModel cityModel) async {
-    selectedCity = cityModel;
+  selectCity(City city) async {
+    selectedCity = city;
     weatherResponse = await _getWeatherByPosition(
-        cityModel.coordModel.lat, cityModel.coordModel.lon);
+        city.lat, city.lon);
+    city.favorite = true;
+    _repository.updateCity(city);
     notifyListeners();
   }
 
@@ -47,13 +50,21 @@ class WeatherState extends ChangeNotifier {
     }
   }
 
-  List<CityModel> getSuggestions(String query) {
-    List<CityModel> matches = [];
-    matches.addAll(cities);
-    matches
-        .retainWhere((s) => s.name.toLowerCase().contains(query.toLowerCase()));
-    return matches;
+  Future<List<City>> getSuggestions(String query) {
+    if (query != null && query.isNotEmpty) {
+      return _repository.getCitiesByKeyWord(query);
+    } else {
+      return Future.value([]);
+    }
   }
+/*  {
+    // List<CityModel> matches = [];
+    // matches.addAll(cities);
+    // matches
+    //     .retainWhere((s) => s.name.toLowerCase().contains(query.toLowerCase()));
+    // return matches;
+
+  }*/
 
   Future<int> getCurrentPlaceCode() => _repository.getCurrentPlaceCode();
 
@@ -62,6 +73,10 @@ class WeatherState extends ChangeNotifier {
   Future<List<CityModel>> getCitiesList() => _repository.loadCitiesList();
 
   Future<bool> isCityTableNotEmpty() => _repository.isCityTableNotEmpty();
+
+  Future<List<City>> getFavoriteCities() => _repository.getFavoriteCities();
+
+  Future<List<WeatherResponse>> getFavoriteWeathers() => _repository.getFavoriteWeathers();
 }
 
 // final weatherProvider = WeatherState();

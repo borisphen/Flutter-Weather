@@ -28,5 +28,6 @@ class CityModel {
     "country": country,
     "lat": coordModel.lat,
     "lon": coordModel.lon,
+    "favorite": 0,
   };
 }

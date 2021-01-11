@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_weather/ui/cities_finder.dart';
+import 'package:flutter_weather/ui/places_list.dart';
 import 'package:flutter_weather/ui/weather_screen.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 import 'bloc/weather_state.dart';
+
+var logger = Logger();
 
 void main() {
   runApp(ChangeNotifierProvider<WeatherState>(
@@ -41,7 +43,7 @@ class MyApp extends StatelessWidget {
       routes: {
         Navigator.defaultRouteName: (context) => MyHomePage(title: "Weather App"),
         '/finder': (context) => CitiesFinder(),
-        // '/details': (context) => DetailsPage()
+        '/favorites': (context) => PlacesListPage(title: "Favorite Cities")
       },
     );
   }
@@ -65,7 +67,12 @@ class _MyHomePageState extends State<MyHomePage> {
           IconButton(
             icon: Icon(Icons.find_in_page),
             onPressed: () => Navigator.pushNamed(context, '/finder'),
-          )
+          ),
+
+          IconButton(
+            icon: Icon(Icons.list),
+            onPressed: () => Navigator.pushNamed(context, '/favorites'),
+          ),
         ],
       ),
       body: WeatherScreen(),

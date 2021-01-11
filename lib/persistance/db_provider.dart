@@ -38,7 +38,8 @@ class DbProvider {
               "state TEXT,"
               "country TEXT,"
               "lat REAL,"
-              "lon REAL"
+              "lon REAL,"
+              "favorite BIT"
               ")");
         }
     );
@@ -74,5 +75,22 @@ class DbProvider {
       result.add(City.fromMap(element));
     });
     return result;
+  }
+
+  Future<List<City>> getFavoriteCities() async {
+    List<City> result = [];
+    final db = await database;
+    var res = await db.rawQuery("SELECT * FROM $tblCity WHERE favorite=1");
+    res.forEach((element) {
+      result.add(City.fromMap(element));
+    });
+    return result;
+  }
+
+  Future<int> updateCity(City city) async {
+    final db = await database;
+    var res = await db.update(tblCity, city.toMap(),
+        where: "id = ?", whereArgs: [city.id]);
+    return res;
   }
 }

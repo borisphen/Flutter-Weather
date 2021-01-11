@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:flutter_weather/bloc/weather_state.dart';
-
-import 'package:flutter_weather/model/city/city_model.dart';
+import 'package:flutter_weather/persistance/model/city.dart';
 import 'package:provider/provider.dart';
 
 class CitiesFinder extends StatelessWidget {
@@ -23,8 +22,8 @@ class CitiesFinder extends StatelessWidget {
               decoration: InputDecoration(labelText: 'City'),
               controller: this._typeAheadController,
             ),
-            suggestionsCallback: (pattern) {
-              return weatherProvider.getSuggestions(pattern);
+            suggestionsCallback: (pattern) async {
+              return await weatherProvider.getSuggestions(pattern);
             },
             transitionBuilder:
                 (context, suggestionsBox, controller) {
@@ -32,11 +31,11 @@ class CitiesFinder extends StatelessWidget {
             },
             itemBuilder: (context, suggestion) {
               return ListTile(
-                title: Text((suggestion as CityModel).name),
+                title: Text((suggestion as City).name),
               );
             },
             onSuggestionSelected: (suggestion) {
-              this._typeAheadController.text = (suggestion as CityModel).name;
+              this._typeAheadController.text = (suggestion as City).name;
               weatherProvider.selectCity(suggestion);
               Navigator.of(context).pop();
             }),

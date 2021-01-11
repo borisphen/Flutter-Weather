@@ -1,18 +1,22 @@
 import 'dart:convert';
+
 import 'package:flutter_weather/model/weather/weather_response_model.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter_weather/model/weather/weathers_model.dart';
 import 'package:http/http.dart' show Client;
+
+import '../main.dart';
 
 const _apiKey = 'b4f1ce98c8299eae7983989d138f01ab';
 final _baseUrl = "https://api.openweathermap.org";
 
 final _baseHttpsUrl = "api.openweathermap.org";
-final dataPath = '/data/2.5/weather';
+final weatherPath = '/data/2.5/weather';
+final groupPath = '/data/2.5/group';
 
 class ApiProvider {
   Client client = Client();
-  // final url = "$_baseUrl/data/2.5/weather?q=Kharkiv,UA&appid=b4f1ce98c8299eae7983989d138f01ab";
 
+  // final url = "$_baseUrl/data/2.5/weather?q=Kharkiv,UA&appid=b4f1ce98c8299eae7983989d138f01ab";
 
   // Future<WeatherResponse> fetchLondonWeather() async {
   //   final response = await client.get("$url");
@@ -33,22 +37,43 @@ class ApiProvider {
   // }
 
   String _getWeatherUrlByLocation(double latitude, double longitude) {
-      var queryParameters = {
-        'lat': latitude.toString(),
-        'lon': longitude.toString(),
-        'appid': _apiKey,
-      };
-      var uri = Uri.https(_baseHttpsUrl, dataPath, queryParameters);
-      print('Constructed ===========================> ${uri.toString()}');
-      return uri.toString();
+    var queryParameters = {
+      'lat': latitude.toString(),
+      'lon': longitude.toString(),
+      'appid': _apiKey,
+    };
+    var uri = Uri.https(_baseHttpsUrl, weatherPath, queryParameters);
+    print('Constructed ===========================> ${uri.toString()}');
+    return uri.toString();
   }
 
-  Future<WeatherResponse> fetchWeatherByLocation(double latitude, double longitude) async {
-    final response = await client.get(_getWeatherUrlByLocation(latitude, longitude));
-    print(response.body.toString());
+  Future<WeatherResponse> fetchWeatherByLocation(
+      double latitude, double longitude) async {
+    final response =
+        await client.get(_getWeatherUrlByLocation(latitude, longitude));
+    logger.d(response.body.toString());
 
     if (response.statusCode == 200) {
       return WeatherResponse.fromJson(json.decode(response.body));
+    } else {
+      return null;
+    }
+  }
+
+  Future<List<WeatherResponse>> getWeatherByCitiesIds(List<int> ids) async {
+    String idsSeparated = ids.join(',');
+    var queryParameters = {
+      'id': idsSeparated,
+      'appid': _apiKey,
+    };
+    var uri = Uri.https(_baseHttpsUrl, groupPath, queryParameters);
+    print('Constructed ===========================> ${uri.toString()}');
+    final response = await client.get(uri.toString());
+    logger.d(response.body.toString());
+
+    if (response.statusCode == 200) {
+      return WeathersModel.fromJson(json.decode(response.body))
+          .weathersModels;
     } else {
       return null;
     }
