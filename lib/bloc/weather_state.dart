@@ -77,6 +77,8 @@ class WeatherState extends ChangeNotifier {
   Future<List<City>> getFavoriteCities() => _repository.getFavoriteCities();
 
   Future<List<WeatherResponse>> getFavoriteWeathers() => _repository.getFavoriteWeathers();
+
+  String getIconUrl(String icon) => _repository.getIconUrl(icon);
 }
 
 // final weatherProvider = WeatherState();

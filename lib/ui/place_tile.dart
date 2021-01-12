@@ -23,16 +23,8 @@ class PlaceTile extends StatelessWidget {
           const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
       leading: Hero(
         tag: 'hero-${weather.id}',
-        child: CircleAvatar(
-          radius: 24.0,
-          backgroundColor: Theme.of(context).primaryColor,
-          // backgroundImage: Image.network(
-          //   weather.avatarUrl,
-          //   width: 48,
-          //   height: 48,
-          //   fit: BoxFit.cover,
-          // ).image,
-        ),
+        child:
+          Image.network(appState.getIconUrl(weather.weather[0].icon)),
       ),
       title: Text(weather.name),
       // trailing: FavoriteButton(

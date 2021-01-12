@@ -50,4 +50,6 @@ class Repository {
     });
     return ids;
   }
+
+  String getIconUrl(String icon) => _appApiProvider.getIconUrl(icon);
 }

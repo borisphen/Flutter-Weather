@@ -7,11 +7,11 @@ class Main {
   double _tempMax;
 
   Main(parsedJson) {
-    _temp = parsedJson['temp'];
-    _tempMin = parsedJson['temp_min'];
+    _temp = parsedJson['temp'] * 1.0;
+    _tempMin = parsedJson['temp_min'] * 1.0;
     _humidity = parsedJson['humidity'];
     _pressure = parsedJson['pressure'];
-    _tempMax = parsedJson['temp_max'];
+    _tempMax = parsedJson['temp_max'] * 1.0;
   }
 
   double get tempMax => _tempMax;
