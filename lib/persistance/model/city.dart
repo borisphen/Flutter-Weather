@@ -32,6 +32,6 @@ class City {
     "country": country,
     "lat": lat,
     "lon": lon,
-    "favorite": favorite,
+    "favorite": favorite ? 1 : 0,
   };
 }

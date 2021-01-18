@@ -12,29 +12,43 @@ class PlacesListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<WeatherState>(context, listen: false);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.favorite),
-            onPressed: () => Navigator.pushNamed(context, '/faved'),
-          )
-        ],
-      ),
-      body: FutureBuilder<List<WeatherResponse>>(
-        future: appState.getFavoriteWeathers(),
-        builder: (BuildContext context, AsyncSnapshot<List<WeatherResponse>> snapshot) => ListView.builder(
-          itemCount: (snapshot.data != null) ? snapshot.data.length : 0,
-          itemBuilder: (context, index) {
-            final weather = snapshot.data[index];
-            return PlaceTile(
-              key: ValueKey(weather.id),
-              weather: weather,
-            );
-          },
-        ),
-      ),
+    return Consumer<WeatherState>(
+        builder: (context, weather, child) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(title),
+              // actions: [
+              //   IconButton(
+              //     icon: Icon(Icons.favorite),
+              //     onPressed: () => Navigator.pushNamed(context, '/faved'),
+              //   )
+              // ],
+            ),
+            body: FutureBuilder<List<WeatherResponse>>(
+              future: appState.getFavoriteWeathers(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<WeatherResponse>> snapshot) =>
+                  ListView.separated(
+                    separatorBuilder: (context, index) => Divider(
+                      color: Colors.black,
+                    ),
+                    itemCount: (snapshot.data != null)
+                        ? snapshot.data.length + 2
+                        : 0,
+                    itemBuilder: (context, index) {
+                      if (index == 0 || index == snapshot.data.length + 1) {
+                        return Container();
+                      }
+                      final weather = snapshot.data[index - 1];
+                      return PlaceTile(
+                        key: ValueKey(weather.id),
+                        weather: weather,
+                      );
+                    },
+                  ),
+            ),
+          );
+        }
     );
   }
 }

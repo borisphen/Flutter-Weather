@@ -54,10 +54,10 @@ class DbProvider {
     batch.commit(noResult: true);
   }
 
-  getCity(int id) async {
+  Future <City> getCityById(int id) async {
     final db = await database;
-    var res =await  db.query(tblCity, where: "id = ?", whereArgs: [id]);
-    return res.isNotEmpty ? City.fromMap(res.first) : Null ;
+    var res = await db.query(tblCity, where: "id = ?", whereArgs: [id]);
+    return res.isNotEmpty ? City.fromMap(res.first) : Null;
   }
 
   Future<bool> isCityTableNotEmpty() async {
@@ -70,7 +70,8 @@ class DbProvider {
   Future<List<City>> getCitiesByKeyWord(String keyWord) async {
     List<City> result = [];
     final db = await database;
-    var res = await db.rawQuery("SELECT * FROM $tblCity WHERE name LIKE '%$keyWord%'");
+    var res = await db.rawQuery(
+        "SELECT * FROM $tblCity WHERE name LIKE '%$keyWord%'");
     res.forEach((element) {
       result.add(City.fromMap(element));
     });
@@ -92,5 +93,16 @@ class DbProvider {
     var res = await db.update(tblCity, city.toMap(),
         where: "id = ?", whereArgs: [city.id]);
     return res;
+  }
+
+  Future<bool> removeFavoriteCityById(int id) async {
+    final db = await database;
+    Map<String, dynamic> row = {
+      'favorite': 0
+    };
+    int updateCount = await db.update(tblCity, row,
+        where: "id = ?",
+        whereArgs: [id]);
+    return updateCount > 0;
   }
 }

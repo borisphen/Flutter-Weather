@@ -36,7 +36,7 @@ class CitiesFinder extends StatelessWidget {
             },
             onSuggestionSelected: (suggestion) {
               this._typeAheadController.text = (suggestion as City).name;
-              weatherProvider.selectCity(suggestion);
+              weatherProvider.setFavoriteCity(suggestion);
               Navigator.of(context).pop();
             }),
       ),

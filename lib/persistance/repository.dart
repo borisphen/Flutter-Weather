@@ -1,4 +1,5 @@
 import 'package:flutter_weather/model/city/city_model.dart';
+import 'package:flutter_weather/model/one_call/OneCallResponse.dart';
 import 'package:flutter_weather/model/weather/weather_response_model.dart';
 import 'package:flutter_weather/persistance/assets_provider.dart';
 import 'package:flutter_weather/persistance/db_provider.dart';
@@ -38,6 +39,8 @@ class Repository {
 
   Future<int> updateCity(City city) => _dbProvider.updateCity(city);
 
+  Future<bool> removeFavoriteCityById(int id) => _dbProvider.removeFavoriteCityById(id);
+
   Future<List<WeatherResponse>> getFavoriteWeathers() async {
     List<City> favoriteCities = await getFavoriteCities();
     return _appApiProvider.getWeatherByCitiesIds(_getCitiesIdsList(favoriteCities));
@@ -52,4 +55,8 @@ class Repository {
   }
 
   String getIconUrl(String icon) => _appApiProvider.getIconUrl(icon);
+
+  Future <City> getCityById(int id) => _dbProvider.getCityById(id);
+
+  Future<OneCallResponse> getOneCallResponse(double lat, double lon) =>  _appApiProvider.getOneCallResponse(lat, lon);
 }

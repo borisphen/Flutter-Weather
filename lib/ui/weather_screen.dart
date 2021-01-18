@@ -1,13 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/bloc/weather_bloc.dart';
 import 'package:flutter_weather/bloc/weather_state.dart';
+import 'package:flutter_weather/model/one_call/OneCallResponse.dart';
 import 'package:flutter_weather/model/weather/coord_model.dart';
 import 'package:flutter_weather/model/weather/main_model.dart';
 import 'package:flutter_weather/model/weather/sys_model.dart';
 import 'package:flutter_weather/model/weather/weather_response_model.dart';
 import 'package:flutter_weather/model/weather/wind_model.dart';
+import 'package:flutter_weather/ui/week_day_tile.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_weather/bloc/weather_bloc.dart';
 import 'package:provider/provider.dart';
 
 class WeatherScreen extends StatefulWidget {
@@ -42,8 +44,9 @@ class WeatherScreenState extends State<WeatherScreen> {
         builder: (context, weather, child) {
           if (weather.weatherResponse != null) {
             return _buildWeatherScreen(weather.weatherResponse);
+            // return _buildForeCast(weather.weatherResponse.coord.lat, weather.weatherResponse.coord.lon);
           } else {
-            return Center(child: Text('Oops smth goes wrong!'));
+            return Center(child: Text('Loading...'));
           }
           return Center(child: CircularProgressIndicator());
         });
@@ -60,6 +63,7 @@ class WeatherScreenState extends State<WeatherScreen> {
           _buildMain(data.main),
           _buildWindInfo(data.wind),
           _buildSys(data.sys),
+          _buildForeCast(data.coord.lat, data.coord.lon),
         ],
       ),
     );
@@ -191,5 +195,39 @@ class WeatherScreenState extends State<WeatherScreen> {
     // compute (null, weatherProvider.loadCitiesList());
   }
 
+  Widget _buildForeCast(double lat, double lon) {
+    final appState = Provider.of<WeatherState>(context, listen: false);
+    return Expanded(
+      child: Container(
+        child: FutureBuilder<OneCallResponse>(
+          future: appState.getOneCallResponse(lat, lon),
+          builder: (BuildContext context,
+              AsyncSnapshot<OneCallResponse> snapshot) =>
+              ListView.separated(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                separatorBuilder: (context, index) => Divider(
+                  color: Colors.black,
+                ),
+                itemCount: (snapshot.data != null)
+                    ? snapshot.data.daily.length + 2
+                    : 0,
+                itemBuilder: (context, index) {
+                  var weekData = snapshot.data.daily;
+                  if (index == 0 || index == weekData.length + 1) {
+                    return Container();
+                  }
+                  final weather = weekData[index - 1];
+                  return WeekTile(
+                    key: ValueKey(weather.weather[0].id),
+                    weather: weather,
+                  );
+                },
+              ),
+        ),
+      ),
+    );
+  }
 
 }
