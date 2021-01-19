@@ -52,19 +52,22 @@ class WeatherScreenState extends State<WeatherScreen> {
         });
   }
 
-  Container _buildWeatherScreen(WeatherResponse data) {
-    return Container(
-      padding: const EdgeInsets.all(17.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          _buildTitle(data.name),
-          _buildCoord(data.coord),
-          _buildMain(data.main),
-          _buildWindInfo(data.wind),
-          _buildSys(data.sys),
-          _buildForeCast(data.coord.lat, data.coord.lon),
-        ],
+  SingleChildScrollView _buildWeatherScreen(WeatherResponse data) {
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.all(17.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            _buildTitle(data.name),
+            _buildCoord(data.coord),
+            _buildMain(data.main),
+            _buildWindInfo(data.wind),
+            _buildSys(data.sys),
+            _buildForeCast(data.coord.lat, data.coord.lon),
+          ],
+        ),
       ),
     );
   }
@@ -197,35 +200,33 @@ class WeatherScreenState extends State<WeatherScreen> {
 
   Widget _buildForeCast(double lat, double lon) {
     final appState = Provider.of<WeatherState>(context, listen: false);
-    return Expanded(
-      child: Container(
-        child: FutureBuilder<OneCallResponse>(
-          future: appState.getOneCallResponse(lat, lon),
-          builder: (BuildContext context,
-              AsyncSnapshot<OneCallResponse> snapshot) =>
-              ListView.separated(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                separatorBuilder: (context, index) => Divider(
-                  color: Colors.black,
-                ),
-                itemCount: (snapshot.data != null)
-                    ? snapshot.data.daily.length + 2
-                    : 0,
-                itemBuilder: (context, index) {
-                  var weekData = snapshot.data.daily;
-                  if (index == 0 || index == weekData.length + 1) {
-                    return Container();
-                  }
-                  final weather = weekData[index - 1];
-                  return WeekTile(
-                    key: ValueKey(weather.weather[0].id),
-                    weather: weather,
-                  );
-                },
+    return Container(
+      child: FutureBuilder<OneCallResponse>(
+        future: appState.getOneCallResponse(lat, lon),
+        builder: (BuildContext context,
+            AsyncSnapshot<OneCallResponse> snapshot) =>
+            ListView.separated(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              separatorBuilder: (context, index) => Divider(
+                color: Colors.black,
               ),
-        ),
+              itemCount: (snapshot.data != null)
+                  ? snapshot.data.daily.length + 2
+                  : 0,
+              itemBuilder: (context, index) {
+                var weekData = snapshot.data.daily;
+                if (index == 0 || index == weekData.length + 1) {
+                  return Container();
+                }
+                final weather = weekData[index - 1];
+                return WeekTile(
+                  key: ValueKey(weather.weather[0].id),
+                  weather: weather,
+                );
+              },
+            ),
       ),
     );
   }
