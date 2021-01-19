@@ -1,8 +1,8 @@
 class OneCallResponse {
-  double lat;
-  double lon;
+  num lat;
+  num lon;
   String timezone;
-  int timezoneOffset;
+  num timezoneOffset;
   Current current;
   List<Daily> daily;
 
@@ -15,8 +15,8 @@ class OneCallResponse {
       this.daily});
 
   OneCallResponse.fromJson(Map<String, dynamic> json) {
-    lat = json['lat'] * 1.0;
-    lon = json['lon'] * 1.0;
+    lat = json['lat'];
+    lon = json['lon'];
     timezone = json['timezone'];
     timezoneOffset = json['timezone_offset'];
     current =
@@ -46,19 +46,19 @@ class OneCallResponse {
 }
 
 class Current {
-  int dt;
-  int sunrise;
-  int sunset;
-  double temp;
-  double feelsLike;
-  int pressure;
-  int humidity;
-  double dewPoint;
-  double uvi;
-  int clouds;
-  int visibility;
-  int windSpeed;
-  int windDeg;
+  num dt;
+  num sunrise;
+  num sunset;
+  num temp;
+  num feelsLike;
+  num pressure;
+  num humidity;
+  num dewPoint;
+  num uvi;
+  num clouds;
+  num visibility;
+  num windSpeed;
+  num windDeg;
   List<Weather> weather;
   Snow snow;
 
@@ -83,12 +83,12 @@ class Current {
     dt = json['dt'];
     sunrise = json['sunrise'];
     sunset = json['sunset'];
-    temp = json['temp'];
+    temp = json['temp'] ;
     feelsLike = json['feels_like'];
     pressure = json['pressure'];
     humidity = json['humidity'];
     dewPoint = json['dew_point'];
-    uvi = json['uvi'] * 1.0;
+    uvi = json['uvi'];
     clouds = json['clouds'];
     visibility = json['visibility'];
     windSpeed = json['wind_speed'];
@@ -128,7 +128,7 @@ class Current {
 }
 
 class Weather {
-  int id;
+  num id;
   String main;
   String description;
   String icon;
@@ -153,12 +153,12 @@ class Weather {
 }
 
 class Snow {
-  double d1h;
+  num d1h;
 
   Snow({this.d1h});
 
   Snow.fromJson(Map<String, dynamic> json) {
-    d1h = json['1h'];
+    d1h = json['1h'] ;
   }
 
   Map<String, dynamic> toJson() {
@@ -169,22 +169,22 @@ class Snow {
 }
 
 class Daily {
-  int dt;
-  int sunrise;
-  int sunset;
+  num dt;
+  num sunrise;
+  num sunset;
   Temp temp;
   FeelsLike feelsLike;
-  int pressure;
-  int humidity;
-  double dewPoint;
-  double windSpeed;
-  int windDeg;
+  num pressure;
+  num humidity;
+  num dewPoint;
+  num windSpeed;
+  num windDeg;
   List<Weather> weather;
-  int clouds;
-  double pop;
-  double snow;
-  double uvi;
-  double rain;
+  num clouds;
+  num pop;
+  num snow;
+  num uvi;
+  num rain;
 
   Daily(
       {this.dt,
@@ -224,10 +224,10 @@ class Daily {
       });
     }
     clouds = json['clouds'];
-    pop = (json['pop'] ?? 0.0) * 1.0;
-    snow = (json['snow'] ?? 0.0) * 1.0;
-    uvi = (json['uvi'] ?? 0.0) * 1.0;
-    rain = (json['rain'] ?? 0.0) * 1.0;
+    pop = (json['pop'] ?? 0.0);
+    snow = (json['snow'] ?? 0.0);
+    uvi = (json['uvi'] ?? 0.0);
+    rain = (json['rain'] ?? 0.0);
   }
 
   Map<String, dynamic> toJson() {
@@ -259,22 +259,22 @@ class Daily {
 }
 
 class Temp {
-  double day;
-  double min;
-  double max;
-  double night;
-  double eve;
-  double morn;
+  num day;
+  num min;
+  num max;
+  num night;
+  num eve;
+  num morn;
 
   Temp({this.day, this.min, this.max, this.night, this.eve, this.morn});
 
   Temp.fromJson(Map<String, dynamic> json) {
-    day = json['day'] * 1.0;
-    min = json['min'] * 1.0;
-    max = json['max'] * 1.0;
-    night = json['night'] * 1.0;
-    eve = json['eve'] * 1.0;
-    morn = json['morn'] * 1.0;
+    day = json['day'];
+    min = json['min'];
+    max = json['max'];
+    night = json['night'];
+    eve = json['eve'];
+    morn = json['morn'];
   }
 
   Map<String, dynamic> toJson() {
@@ -290,18 +290,18 @@ class Temp {
 }
 
 class FeelsLike {
-  double day;
-  double night;
-  double eve;
-  double morn;
+  num day;
+  num night;
+  num eve;
+  num morn;
 
   FeelsLike({this.day, this.night, this.eve, this.morn});
 
   FeelsLike.fromJson(Map<String, dynamic> json) {
-    day = json['day'] * 1.0;
-    night = json['night'] * 1.0;
-    eve = json['eve'] * 1.0;
-    morn = json['morn'] * 1.0;
+    day = json['day'];
+    night = json['night'];
+    eve = json['eve'];
+    morn = json['morn'];
   }
 
   Map<String, dynamic> toJson() {

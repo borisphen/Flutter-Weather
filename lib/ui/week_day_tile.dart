@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/bloc/weather_state.dart';
 import 'package:flutter_weather/model/one_call/OneCallResponse.dart';
+import 'package:flutter_weather/utils/TimeUtils.dart';
 import 'package:provider/provider.dart';
 
 class WeekTile extends StatelessWidget {
@@ -15,15 +16,14 @@ class WeekTile extends StatelessWidget {
 
     return ListTile(
       contentPadding:
-          const EdgeInsets.symmetric(horizontal: 16.0),
-      title: Text(_getCurrentTemp(weather)),
+          const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),
+      title: Text(_getWeekDay(weather)),
+      leading: Image.network(appState.getIconUrl(weather.weather[0].icon),
+          fit: BoxFit.fitWidth),
       subtitle: Row(
-        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Image.network(appState.getIconUrl(weather.weather[0].icon),
-          width: 24,
-          height: 24,),
+          Text(_getHumidity(weather)),
           Text(_getMinMaxTemp(weather)),
         ],
       ),
@@ -35,6 +35,15 @@ class WeekTile extends StatelessWidget {
   }
 
   String _getMinMaxTemp(Daily daily) {
-    return "Min/Max temp: ${daily.temp.max.toInt()} / ${daily.temp.max.toInt()}";
+    return "${daily.temp.max.toInt()}\u2103 / ${daily.temp.min.toInt()}\u2103";
+  }
+
+  String _getWeekDay(Daily daily) {
+    var weekDay = getDateFormatted(daily.dt);
+    return weekDay;
+  }
+
+  String _getHumidity(Daily daily) {
+    return "${daily.humidity}%";
   }
 }

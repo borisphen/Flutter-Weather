@@ -109,7 +109,7 @@ class ApiProvider {
     return null;
   }
 
-  Future<OneCallResponse> getOneCallResponse(double lat, double lon) async {
+  Future<OneCallResponse> getOneCallResponse(num lat, num lon) async {
     try {
       var queryParameters = {
         'lat': lat.toString(),

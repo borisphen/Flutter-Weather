@@ -131,7 +131,7 @@ class WeatherScreenState extends State<WeatherScreen> {
     return Column(
       children: <Widget>[
         Container(
-          margin: const EdgeInsets.only(bottom: 12.0),
+          margin: const EdgeInsets.only(bottom: 12.0, top: 12.0),
           child: Text(
             "Wind",
             style: TextStyle(
@@ -201,6 +201,7 @@ class WeatherScreenState extends State<WeatherScreen> {
   Widget _buildForeCast(double lat, double lon) {
     final appState = Provider.of<WeatherState>(context, listen: false);
     return Container(
+      margin: const EdgeInsets.only(top: 16.0),
       child: FutureBuilder<OneCallResponse>(
         future: appState.getOneCallResponse(lat, lon),
         builder: (BuildContext context,
@@ -210,6 +211,7 @@ class WeatherScreenState extends State<WeatherScreen> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               separatorBuilder: (context, index) => Divider(
+                height: 1,
                 color: Colors.black,
               ),
               itemCount: (snapshot.data != null)
