@@ -28,10 +28,13 @@ class PlaceTile extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Image.network(
-              appState.getIconUrl(weather.weather[0].icon),
-              width: 24,
-              height: 24,
+            Hero(
+              tag: '${weather.id}',
+              child: Image.network(
+                appState.getIconUrl(weather.weather[0].icon),
+                width: 24,
+                height: 24,
+              ),
             ),
             Text(_getCurrentTemp(weather)),
             Text(_getMinMaxTemp(weather)),

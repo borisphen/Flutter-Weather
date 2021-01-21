@@ -14,12 +14,6 @@ class WeatherState extends ChangeNotifier {
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   bool isLightTheme = true;
 
-  // WeatherState(this.isLightTheme);
-  // fetchWeather() async {
-  //   weatherResponse = await _repository.fetchLondonWeather();
-  //   notifyListeners();
-  // }
-
   getCurrentLocation() async {
     geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
