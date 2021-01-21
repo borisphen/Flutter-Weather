@@ -19,32 +19,12 @@ class WeatherScreen extends StatefulWidget {
 
 class WeatherScreenState extends State<WeatherScreen> {
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   weatherBloc.fetchLondonWeather();
-  //   return StreamBuilder(
-  //       stream: weatherBloc.weather,
-  //       builder: (context, AsyncSnapshot<WeatherResponse> snapshot) {
-  //         if (snapshot.hasData) {
-  //           return _buildWeatherScreen(snapshot.data);
-  //         } else if (snapshot.hasError) {
-  //           return Text(snapshot.error.toString());
-  //         }
-  //         return Center(child: CircularProgressIndicator());
-  //       });
-  // }
-
-
-
   @override
   Widget build(BuildContext context) {
-    // weatherBloc.fetchLondonWeather();
-    // weatherProvider.fetchWeather();
     return Consumer<WeatherState>(
         builder: (context, weather, child) {
           if (weather.weatherResponse != null) {
             return _buildWeatherScreen(weather.weatherResponse);
-            // return _buildForeCast(weather.weatherResponse.coord.lat, weather.weatherResponse.coord.lon);
           } else {
             return Center(child: Text('Loading...'));
           }
@@ -53,6 +33,7 @@ class WeatherScreenState extends State<WeatherScreen> {
   }
 
   SingleChildScrollView _buildWeatherScreen(WeatherResponse data) {
+    var titleColor = Theme.of(context).accentColor;
     return SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.all(17.0),
@@ -60,30 +41,30 @@ class WeatherScreenState extends State<WeatherScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            _buildTitle(data.name),
-            _buildCoord(data.coord),
-            _buildMain(data.main),
-            _buildWindInfo(data.wind),
-            _buildSys(data.sys),
-            _buildForeCast(data.coord.lat, data.coord.lon),
+            _buildTitle(data.name, titleColor),
+            _buildCoord(data.coord, titleColor),
+            _buildMain(data.main, titleColor),
+            _buildWindInfo(data.wind, titleColor),
+            _buildSys(data.sys, titleColor),
+            _buildForeCast(data.coord.lat, data.coord.lon, titleColor),
           ],
         ),
       ),
     );
   }
 
-  Center _buildTitle(String name) {
+  Center _buildTitle(String name, Color titleColor) {
     return Center(
       child: Text(
         "Weather in " + name,
         style:
-        TextStyle(color: Color.fromRGBO(0, 123, 174, 100), fontSize: 40.0),
+        TextStyle(color: titleColor, fontSize: 40.0),
         textAlign: TextAlign.center,
       ),
     );
   }
 
-  Column _buildCoord(Coord coord) {
+  Column _buildCoord(Coord coord, Color titleColor) {
     return Column(
       children: <Widget>[
         Container(
@@ -91,7 +72,7 @@ class WeatherScreenState extends State<WeatherScreen> {
           child: Text(
             "Coord",
             style: TextStyle(
-                color: Color.fromRGBO(0, 123, 174, 100), fontSize: 18.0),
+                color: titleColor, fontSize: 18.0),
           ),
         ),
         Row(
@@ -106,7 +87,7 @@ class WeatherScreenState extends State<WeatherScreen> {
     );
   }
 
-  Column _buildMain(Main main) {
+  Column _buildMain(Main main, Color titleColor) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -115,7 +96,7 @@ class WeatherScreenState extends State<WeatherScreen> {
           child: Text(
             "Main",
             style: TextStyle(
-                color: Color.fromRGBO(0, 123, 174, 100), fontSize: 18.0),
+                color: titleColor, fontSize: 18.0),
           ),
         ),
         Text("Temperature: " + main.temp.toString()),
@@ -127,7 +108,7 @@ class WeatherScreenState extends State<WeatherScreen> {
     );
   }
 
-  Column _buildWindInfo(Wind wind) {
+  Column _buildWindInfo(Wind wind, Color titleColor) {
     return Column(
       children: <Widget>[
         Container(
@@ -135,7 +116,7 @@ class WeatherScreenState extends State<WeatherScreen> {
           child: Text(
             "Wind",
             style: TextStyle(
-                color: Color.fromRGBO(0, 123, 174, 100), fontSize: 18.0),
+                color: titleColor, fontSize: 18.0),
           ),
         ),
         Row(
@@ -155,7 +136,7 @@ class WeatherScreenState extends State<WeatherScreen> {
         height: 20, child: VerticalDivider(color: Colors.blueGrey));
   }
 
-  Column _buildSys(Sys sys) {
+  Column _buildSys(Sys sys, Color titleColor) {
     final dateFormat = new DateFormat('hh:mm:ss');
 
     var sunriseDate =
@@ -168,7 +149,7 @@ class WeatherScreenState extends State<WeatherScreen> {
           child: Text(
             "Sys",
             style: TextStyle(
-                color: Color.fromRGBO(0, 123, 174, 100), fontSize: 18.0),
+                color: titleColor, fontSize: 18.0),
           ),
         ),
         Row(
@@ -198,37 +179,48 @@ class WeatherScreenState extends State<WeatherScreen> {
     // compute (null, weatherProvider.loadCitiesList());
   }
 
-  Widget _buildForeCast(double lat, double lon) {
+  Widget _buildForeCast(double lat, double lon, Color titleColor) {
     final appState = Provider.of<WeatherState>(context, listen: false);
     return Container(
       margin: const EdgeInsets.only(top: 16.0),
-      child: FutureBuilder<OneCallResponse>(
-        future: appState.getOneCallResponse(lat, lon),
-        builder: (BuildContext context,
-            AsyncSnapshot<OneCallResponse> snapshot) =>
-            ListView.separated(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              separatorBuilder: (context, index) => Divider(
-                height: 1,
-                color: Colors.black,
-              ),
-              itemCount: (snapshot.data != null)
-                  ? snapshot.data.daily.length + 2
-                  : 0,
-              itemBuilder: (context, index) {
-                var weekData = snapshot.data.daily;
-                if (index == 0 || index == weekData.length + 1) {
-                  return Container();
-                }
-                final weather = weekData[index - 1];
-                return WeekTile(
-                  key: ValueKey(weather.weather[0].id),
-                  weather: weather,
-                );
-              },
+      child: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              "Week forecast",
+              style: TextStyle(
+                  color: titleColor, fontSize: 18.0),
             ),
+          ),
+          FutureBuilder<OneCallResponse>(
+          future: appState.getOneCallResponse(lat, lon),
+          builder: (BuildContext context,
+              AsyncSnapshot<OneCallResponse> snapshot) =>
+              ListView.separated(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                separatorBuilder: (context, index) => Divider(
+                  height: 1,
+                  color: Colors.black,
+                ),
+                itemCount: (snapshot.data != null)
+                    ? snapshot.data.daily.length + 2
+                    : 0,
+                itemBuilder: (context, index) {
+                  var weekData = snapshot.data.daily;
+                  if (index == 0 || index == weekData.length + 1) {
+                    return Container();
+                  }
+                  final weather = weekData[index - 1];
+                  return WeekTile(
+                    key: ValueKey(weather.weather[0].id),
+                    weather: weather,
+                  );
+                },
+              ),
+        ),],
       ),
     );
   }

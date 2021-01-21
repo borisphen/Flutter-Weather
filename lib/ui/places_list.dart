@@ -17,12 +17,6 @@ class PlacesListPage extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: Text(title),
-              // actions: [
-              //   IconButton(
-              //     icon: Icon(Icons.favorite),
-              //     onPressed: () => Navigator.pushNamed(context, '/faved'),
-              //   )
-              // ],
             ),
             body: FutureBuilder<List<WeatherResponse>>(
               future: appState.getFavoriteWeathers(),

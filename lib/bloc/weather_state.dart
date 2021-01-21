@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/model/city/city_model.dart';
 import 'package:flutter_weather/model/one_call/OneCallResponse.dart';
@@ -13,7 +12,9 @@ class WeatherState extends ChangeNotifier {
   List<CityModel> favoriteCities;
   final Repository _repository = Repository();
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  bool isLightTheme = true;
 
+  // WeatherState(this.isLightTheme);
   // fetchWeather() async {
   //   weatherResponse = await _repository.fetchLondonWeather();
   //   notifyListeners();
@@ -104,7 +105,22 @@ class WeatherState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<OneCallResponse> getOneCallResponse(double lat, double lon) => _repository.getOneCallResponse(lat, lon);
+  Future<OneCallResponse> getOneCallResponse(double lat, double lon) =>
+      _repository.getOneCallResponse(lat, lon);
+
+  _saveCurrentTheme(bool isLight) => _repository.saveCurrentTheme(isLight);
+
+  switchTheme() {
+    isLightTheme = !isLightTheme;
+    _saveCurrentTheme(isLightTheme);
+    notifyListeners();
+  }
+
+  initTheme() async {
+    isLightTheme = await _repository.getCurrentTheme();
+  }
+
+  ThemeMode getCurrentTheme() => isLightTheme ? ThemeMode.light : ThemeMode.dark;
 }
 
 // final weatherProvider = WeatherState();
