@@ -59,16 +59,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        // actions: [
-        //   IconButton(
-        //     icon: Icon(Icons.find_in_page),
-        //     onPressed: () => Navigator.pushNamed(context, '/finder'),
-        //   ),
-        //   IconButton(
-        //     icon: Icon(Icons.list),
-        //     onPressed: () => Navigator.pushNamed(context, '/favorites'),
-        //   ),
-        // ],
       ),
       drawer: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll

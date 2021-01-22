@@ -1,28 +1,35 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/model/city/city_model.dart';
 import 'package:flutter_weather/model/one_call/OneCallResponse.dart';
 import 'package:flutter_weather/model/weather/weather_response_model.dart';
+import 'package:flutter_weather/model/web/location/WebLocationResponse.dart';
 import 'package:flutter_weather/persistance/model/city.dart';
 import 'package:flutter_weather/persistance/repository.dart';
 import 'package:geolocator/geolocator.dart';
 
 class WeatherState extends ChangeNotifier {
   WeatherResponse weatherResponse;
-  Position currentPosition;
   List<CityModel> favoriteCities;
   final Repository _repository = Repository();
-  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   bool isLightTheme = true;
 
   getCurrentLocation() async {
-    geolocator
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-        .then((Position position) async {
-      currentPosition = position;
-      weatherResponse =
-          await _getWeatherByPosition(position.latitude, position.longitude);
-      notifyListeners();
-    });
+    if (kIsWeb) {
+        WebLocationResponse webLocationResponse = await _repository.getWebLocation();
+        weatherResponse =
+        await _getWeatherByPosition(webLocationResponse.latitude, webLocationResponse.longitude);
+        notifyListeners();
+    } else {
+      final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+      geolocator
+          .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+          .then((Position position) async {
+        weatherResponse =
+        await _getWeatherByPosition(position.latitude, position.longitude);
+        notifyListeners();
+      });
+    }
   }
 
   Future<WeatherResponse> _getWeatherByPosition(double lat, double lon) async {

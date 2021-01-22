@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_weather/model/one_call/OneCallResponse.dart';
 import 'package:flutter_weather/model/weather/weather_response_model.dart';
 import 'package:flutter_weather/model/weather/weathers_model.dart';
+import 'package:flutter_weather/model/web/location/WebLocationResponse.dart';
 import 'package:http/http.dart' show Client;
 
 import '../main.dart';
@@ -16,6 +17,8 @@ final _groupPath = '/data/2.5/group';
 final _iconPath = '/img/w/';
 final _forecastPath = '/data/2.5/forecast/daily';
 final _oneCallPath = '/data/2.5/onecall';
+
+final webLocationUrl = 'https://geolocation-db.com/json/';
 
 class ApiProvider {
   Client client = Client();
@@ -136,5 +139,20 @@ class ApiProvider {
 
   String getIconUrl(String icon) {
     return "$_baseUrl$_iconPath$icon.png";
+  }
+
+  Future<WebLocationResponse> getWebLocation() async {
+    try {
+      final response = await client.get(webLocationUrl);
+      logger.d(response.body.toString());
+      if (response.statusCode == 200) {
+        return WebLocationResponse.fromJson(json.decode(response.body));
+      } else {
+        return null;
+      }
+    } catch (e) {
+      logger.e(e.toString());
+    }
+    return null;
   }
 }

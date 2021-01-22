@@ -1,6 +1,7 @@
 import 'package:flutter_weather/model/city/city_model.dart';
 import 'package:flutter_weather/model/one_call/OneCallResponse.dart';
 import 'package:flutter_weather/model/weather/weather_response_model.dart';
+import 'package:flutter_weather/model/web/location/WebLocationResponse.dart';
 import 'package:flutter_weather/persistance/assets_provider.dart';
 import 'package:flutter_weather/persistance/db_provider.dart';
 import 'package:flutter_weather/persistance/prefs_provider.dart';
@@ -66,4 +67,6 @@ class Repository {
   saveCurrentTheme(bool isLight) => _prefsProvider.saveCurrentTheme(isLight);
 
   Future<bool> getCurrentTheme() => _prefsProvider.getCurrentTheme();
+
+  Future<WebLocationResponse> getWebLocation() => _appApiProvider.getWebLocation();
 }
