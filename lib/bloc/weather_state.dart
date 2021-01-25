@@ -10,7 +10,6 @@ import 'package:geolocator/geolocator.dart';
 
 class WeatherState extends ChangeNotifier {
   WeatherResponse weatherResponse;
-  List<CityModel> favoriteCities;
   final Repository _repository = Repository();
   bool isLightTheme = true;
 
