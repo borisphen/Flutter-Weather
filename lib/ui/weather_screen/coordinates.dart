@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/bloc/weather_state.dart';
 import 'package:flutter_weather/ui/weather_screen/vertical_divider.dart';
@@ -6,14 +7,15 @@ import 'package:provider/provider.dart';
 class Coordinates extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final coord = Provider.of<WeatherState>(context, listen: false).weatherResponse.coord;
+    final coord =
+        Provider.of<WeatherState>(context, listen: false).weatherResponse.coord;
     return Column(
       children: <Widget>[
         Container(
           margin: const EdgeInsets.only(bottom: 12.0),
           child: Text(
             "Coord",
-            /*        style: TextStyle(color: titleColor, fontSize: 18.0),*/
+            style: Theme.of(context).textTheme.headline5,
           ),
         ),
         Row(

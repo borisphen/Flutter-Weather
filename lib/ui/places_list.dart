@@ -11,21 +11,23 @@ class PlacesListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<WeatherState>(context, listen: false);
-    return Consumer<WeatherState>(
-        builder: (context, weather, child) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(title),
-            ),
-            body: FutureBuilder<List<WeatherResponse>>(
-              future: appState.getFavoriteWeathers(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: Consumer<WeatherState>(
+          builder: (context, weather, child) {
+            final Future<List<WeatherResponse>> weathers = weather
+                .getFavoriteWeathers();
+            return FutureBuilder<List<WeatherResponse>>(
+              future: weathers,
               builder: (BuildContext context,
                   AsyncSnapshot<List<WeatherResponse>> snapshot) =>
                   ListView.separated(
-                    separatorBuilder: (context, index) => Divider(
-                      color: Colors.black,
-                    ),
+                    separatorBuilder: (context, index) =>
+                        Divider(
+                          color: Colors.black,
+                        ),
                     itemCount: (snapshot.data != null)
                         ? snapshot.data.length + 2
                         : 0,
@@ -40,9 +42,9 @@ class PlacesListPage extends StatelessWidget {
                       );
                     },
                   ),
-            ),
-          );
-        }
+            );
+          }
+      ),
     );
   }
 }

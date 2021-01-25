@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/bloc/weather_state.dart';
 import 'package:flutter_weather/ui/weather_screen/vertical_divider.dart';
@@ -13,7 +14,7 @@ class WindInfo extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 12.0, top: 12.0),
           child: Text(
             "Wind",
-           /* style: TextStyle(color: titleColor, fontSize: 18.0),*/
+            style: Theme.of(context).textTheme.headline5,
           ),
         ),
         Row(

@@ -4,8 +4,20 @@ import 'package:flutter_weather/bloc/weather_state.dart';
 import 'package:flutter_weather/persistance/model/city.dart';
 import 'package:provider/provider.dart';
 
-class CitiesFinder extends StatelessWidget {
+class CitiesFinder extends StatefulWidget {
+  @override
+  _CitiesFinderState createState() => _CitiesFinderState();
+}
+
+class _CitiesFinderState extends State<CitiesFinder> {
   final TextEditingController _typeAheadController = TextEditingController();
+
+
+  @override
+  void dispose() {
+    _typeAheadController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

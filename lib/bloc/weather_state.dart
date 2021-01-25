@@ -11,7 +11,6 @@ import 'package:geolocator/geolocator.dart';
 class WeatherState extends ChangeNotifier {
   WeatherResponse weatherResponse;
   final Repository _repository = Repository();
-  bool isLightTheme = true;
 
   getCurrentLocation() async {
     if (kIsWeb) {
@@ -107,20 +106,6 @@ class WeatherState extends ChangeNotifier {
 
   Future<OneCallResponse> getOneCallResponse(double lat, double lon) =>
       _repository.getOneCallResponse(lat, lon);
-
-  _saveCurrentTheme(bool isLight) => _repository.saveCurrentTheme(isLight);
-
-  switchTheme() {
-    isLightTheme = !isLightTheme;
-    _saveCurrentTheme(isLightTheme);
-    notifyListeners();
-  }
-
-  initTheme() async {
-    isLightTheme = await _repository.getCurrentTheme();
-  }
-
-  ThemeMode getCurrentTheme() => isLightTheme ? ThemeMode.light : ThemeMode.dark;
 }
 
 // final weatherProvider = WeatherState();

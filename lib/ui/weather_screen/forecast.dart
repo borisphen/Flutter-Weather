@@ -12,6 +12,8 @@ class Forecast extends StatelessWidget {
     final appState = Provider.of<WeatherState>(context, listen: false);
     var lat = appState.weatherResponse.coord.lat;
     var lon = appState.weatherResponse.coord.lon;
+    Future<OneCallResponse> onCallFuture =
+        appState.getOneCallResponse(lat, lon);
     return Container(
       margin: const EdgeInsets.only(top: 16.0),
       child: Column(
@@ -20,11 +22,11 @@ class Forecast extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 8.0),
             child: Text(
               "Week forecast",
-/*              style: TextStyle(color: titleColor, fontSize: 18.0),*/
+              style: Theme.of(context).textTheme.headline5,
             ),
           ),
           FutureBuilder<OneCallResponse>(
-            future: appState.getOneCallResponse(lat, lon),
+            future: onCallFuture,
             builder: (BuildContext context,
                     AsyncSnapshot<OneCallResponse> snapshot) =>
                 ListView.separated(

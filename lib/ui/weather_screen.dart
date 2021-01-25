@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/bloc/weather_bloc.dart';
 import 'package:flutter_weather/bloc/weather_state.dart';
 import 'package:flutter_weather/model/weather/weather_response_model.dart';
+import 'package:flutter_weather/persistance/repository.dart';
 import 'package:flutter_weather/ui/weather_screen/coordinates.dart';
 import 'package:flutter_weather/ui/weather_screen/forecast.dart';
 import 'package:flutter_weather/ui/weather_screen/main_weather_data.dart';
@@ -21,8 +23,8 @@ class WeatherScreenState extends State<WeatherScreen> {
     super.initState();
     final weatherProvider = Provider.of<WeatherState>(context, listen: false);
     weatherProvider.getCurrentLocation();
-    weatherProvider.loadCitiesList();
-    // compute (null, weatherProvider.loadCitiesList());
+    // weatherProvider.loadCitiesList();
+    load();
   }
 
   @override
@@ -37,9 +39,8 @@ class WeatherScreenState extends State<WeatherScreen> {
       if (weather.weatherResponse != null) {
         return _buildWeatherScreen(weather.weatherResponse);
       } else {
-        return Center(child: Text('Loading...'));
+        return Center(child: CircularProgressIndicator());
       }
-      return Center(child: CircularProgressIndicator());
     });
   }
 
@@ -68,9 +69,23 @@ class WeatherScreenState extends State<WeatherScreen> {
     return Center(
       child: Text(
         "Weather in " + name,
-        style: TextStyle(color: titleColor, fontSize: 40.0),
+        style: Theme.of(context).textTheme.headline4,
         textAlign: TextAlign.center,
       ),
     );
+  }
+}
+
+load() async {
+  await compute(loadCitiesList(), null);
+}
+
+loadCitiesList() async {
+  var _repository = Repository();
+  bool isDbHasCities = await _repository.isCityTableNotEmpty();
+  if (!isDbHasCities) {
+    await _repository
+        .loadCitiesList()
+        .then((value) => _repository.insertCities(value));
   }
 }

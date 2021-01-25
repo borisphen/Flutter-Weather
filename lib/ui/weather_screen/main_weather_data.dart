@@ -1,4 +1,5 @@
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/bloc/weather_state.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,7 @@ class MainWeatherData extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 12.0),
           child: Text(
             "Main",
-     /*       style: TextStyle(color: titleColor, fontSize: 18.0),*/
+            style: Theme.of(context).textTheme.headline5,
           ),
         ),
         Row(
