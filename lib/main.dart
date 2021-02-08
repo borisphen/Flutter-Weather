@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/bloc/current_weather/current_weather_bloc.dart';
 import 'package:flutter_weather/ui/cities_finder.dart';
 import 'package:flutter_weather/ui/places_list.dart';
 import 'package:flutter_weather/ui/weather_screen.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
+import 'bloc/bloc_provider.dart';
 import 'bloc/theme_state.dart';
 import 'bloc/weather_state.dart';
 
 var logger = Logger();
 
 void main() async {
+  //
   WidgetsFlutterBinding.ensureInitialized();
   var themState = ThemeState();
   await themState.initTheme();
@@ -102,7 +105,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      body: WeatherScreen(),
+      // body: WeatherScreen(),
+      body: BlocProvider<CurrentWeatherBloc>(
+        bloc: CurrentWeatherBloc(),
+        child: WeatherScreen(),
+      ),
       // body: CitiesFinder(),
     );
   }

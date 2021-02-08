@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_weather/bloc/weather_state.dart';
+import 'package:flutter_weather/bloc/bloc_provider.dart';
+import 'package:flutter_weather/bloc/current_weather/current_weather_bloc.dart';
 import 'package:flutter_weather/ui/weather_screen/vertical_divider.dart';
-import 'package:provider/provider.dart';
 
 class WindInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final wind = Provider.of<WeatherState>(context, listen: false).weatherResponse.wind;
+    var currentWeatherBloc = BlocProvider.of<CurrentWeatherBloc>(context);
+    final wind = currentWeatherBloc.data.wind;
     return Column(
       children: <Widget>[
         Container(

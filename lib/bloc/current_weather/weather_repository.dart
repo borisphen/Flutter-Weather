@@ -2,14 +2,13 @@ import 'package:flutter_weather/model/city/city_model.dart';
 import 'package:flutter_weather/model/one_call/OneCallResponse.dart';
 import 'package:flutter_weather/model/weather/weather_response_model.dart';
 import 'package:flutter_weather/model/web/location/WebLocationResponse.dart';
+import 'package:flutter_weather/persistance/api_provider.dart';
 import 'package:flutter_weather/persistance/assets_provider.dart';
 import 'package:flutter_weather/persistance/db_provider.dart';
+import 'package:flutter_weather/persistance/model/city.dart';
 import 'package:flutter_weather/persistance/prefs_provider.dart';
 
-import 'api_provider.dart';
-import 'model/city.dart';
-
-class Repository {
+class WeatherRepository {
   ApiProvider _appApiProvider = ApiProvider();
   PrefsProvider _prefsProvider = PrefsProvider();
   AssetsProvider _assetsProvider = AssetsProvider();
@@ -70,5 +69,3 @@ class Repository {
 
   Future<WebLocationResponse> getWebLocation() => _appApiProvider.getWebLocation();
 }
-
-var repository = Repository();

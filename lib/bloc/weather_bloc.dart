@@ -16,6 +16,7 @@ class WeatherBloc {
 
   dispose() {
     _weatherFetcher.close();
+    // BlocProvider(create: null)
   }
 }
 

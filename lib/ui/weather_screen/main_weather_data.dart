@@ -1,14 +1,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_weather/bloc/weather_state.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_weather/bloc/bloc_provider.dart';
+import 'package:flutter_weather/bloc/current_weather/current_weather_bloc.dart';
 
 class MainWeatherData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<WeatherState>(context, listen: false);
-    var weatherResponse = appState.weatherResponse;
+    // final appState = Provider.of<WeatherState>(context, listen: false);
+    var currentWeatherBloc = BlocProvider.of<CurrentWeatherBloc>(context);
+    var weatherResponse = currentWeatherBloc.data;
     var weather = weatherResponse.weather[0];
     var main = weatherResponse.main;
     return Column(
@@ -28,7 +29,7 @@ class MainWeatherData extends StatelessWidget {
                 margin: const EdgeInsets.only(right: 4.0),
                 child: Hero(
                     tag: '${weatherResponse.id}',
-                    child: Image.network(appState.getIconUrl(weather.icon)))),
+                    child: Image.network(currentWeatherBloc.getIconUrl(weather.icon)))),
             Text("Temperature: " + weatherResponse.main.temp.toString()),
           ],
         ),

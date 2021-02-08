@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/bloc/bloc_provider.dart';
+import 'package:flutter_weather/bloc/current_weather/current_weather_bloc.dart';
+import 'package:flutter_weather/bloc/current_weather/get_current_weather_event.dart';
+import 'package:flutter_weather/bloc/forecast/weather_forecast_bloc.dart';
 import 'package:flutter_weather/bloc/weather_bloc.dart';
-import 'package:flutter_weather/bloc/weather_state.dart';
 import 'package:flutter_weather/model/weather/weather_response_model.dart';
 import 'package:flutter_weather/persistance/repository.dart';
 import 'package:flutter_weather/ui/weather_screen/coordinates.dart';
@@ -9,7 +12,6 @@ import 'package:flutter_weather/ui/weather_screen/forecast.dart';
 import 'package:flutter_weather/ui/weather_screen/main_weather_data.dart';
 import 'package:flutter_weather/ui/weather_screen/sys_info.dart';
 import 'package:flutter_weather/ui/weather_screen/wind_info.dart';
-import 'package:provider/provider.dart';
 
 class WeatherScreen extends StatefulWidget {
   @override
@@ -21,9 +23,11 @@ class WeatherScreenState extends State<WeatherScreen> {
   @override
   void initState() {
     super.initState();
-    final weatherProvider = Provider.of<WeatherState>(context, listen: false);
-    weatherProvider.getCurrentLocation();
+    // final weatherProvider = Provider.of<WeatherState>(context, listen: false);
+    // weatherProvider.getCurrentLocation();
     // weatherProvider.loadCitiesList();
+    var currentWeatherBloc = BlocProvider.of<CurrentWeatherBloc>(context);
+    currentWeatherBloc.putEvent(GetCurrentWeatherEvent());
     load();
   }
 
@@ -35,9 +39,14 @@ class WeatherScreenState extends State<WeatherScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<WeatherState>(builder: (context, weather, child) {
-      if (weather.weatherResponse != null) {
-        return _buildWeatherScreen(weather.weatherResponse);
+    var currentWeatherBloc = BlocProvider.of<CurrentWeatherBloc>(context);
+    return StreamBuilder(
+        stream: currentWeatherBloc.stateStream,
+        builder: (BuildContext context, AsyncSnapshot<WeatherResponse> snapshot) {
+    // return Consumer<WeatherState>(builder: (context, weather, child) {
+
+      if (snapshot.data != null) {
+        return _buildWeatherScreen(snapshot.data);
       } else {
         return Center(child: CircularProgressIndicator());
       }
@@ -58,7 +67,10 @@ class WeatherScreenState extends State<WeatherScreen> {
             MainWeatherData(),
             WindInfo(),
             SysInfo(),
-            Forecast(),
+            BlocProvider<WeatherForecastBloc>(
+              bloc: WeatherForecastBloc(),
+              child: Forecast(),
+            ),
           ],
         ),
       ),
@@ -77,7 +89,7 @@ class WeatherScreenState extends State<WeatherScreen> {
 }
 
 load() async {
-  await compute(loadCitiesList(), null);
+  await compute(loadCitiesList(), {});
 }
 
 loadCitiesList() async {
