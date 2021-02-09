@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_weather/bloc/bloc_provider.dart';
 import 'package:flutter_weather/bloc/current_weather/current_weather_bloc.dart';
 import 'package:flutter_weather/bloc/forecast/forecast_weather_event.dart';
@@ -11,15 +11,12 @@ import '../week_day_tile.dart';
 class Forecast extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // final appState = Provider.of<WeatherState>(context, listen: false);
     var currentWeatherBloc = BlocProvider.of<CurrentWeatherBloc>(context);
     var weatherForecastBloc = BlocProvider.of<WeatherForecastBloc>(context);
     var lat = currentWeatherBloc.data.coord.lat;
     var lon = currentWeatherBloc.data.coord.lon;
 
     weatherForecastBloc.putEvent(WeekForecastEvent(lat, lon));
-    // Future<OneCallResponse> onCallFuture =
-    //     appState.getOneCallResponse(lat, lon);
     return Container(
       margin: const EdgeInsets.only(top: 16.0),
       child: Column(

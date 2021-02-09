@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/bloc/weather_state.dart';
+import 'package:flutter_weather/bloc/bloc_provider.dart';
+import 'package:flutter_weather/bloc/current_weather/current_weather_bloc.dart';
 import 'package:flutter_weather/model/one_call/OneCallResponse.dart';
 import 'package:flutter_weather/utils/TimeUtils.dart';
-import 'package:provider/provider.dart';
 
 class WeekTile extends StatelessWidget {
   final Daily weather;
@@ -12,13 +12,14 @@ class WeekTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<WeatherState>(context, listen: false);
+    // final appState = Provider.of<WeatherState>(context, listen: false);
+    var currentWeatherBloc = BlocProvider.of<CurrentWeatherBloc>(context);
 
     return ListTile(
       contentPadding:
           const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0.0),
       title: Text(_getWeekDay(weather)),
-      leading: Image.network(appState.getIconUrl(weather.weather[0].icon),
+      leading: Image.network(currentWeatherBloc.getIconUrl(weather.weather[0].icon),
           fit: BoxFit.fitWidth),
       subtitle: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

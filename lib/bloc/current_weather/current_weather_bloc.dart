@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_weather/model/weather/weather_response_model.dart';
 import 'package:flutter_weather/model/web/location/WebLocationResponse.dart';
+import 'package:flutter_weather/persistance/model/city.dart';
 import 'package:flutter_weather/persistance/repository.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -38,4 +39,29 @@ class CurrentWeatherBloc extends Bloc<GetCurrentWeatherEvent, WeatherResponse> {
   @override
   Future<WeatherResponse> retrieveData(GetCurrentWeatherEvent event) =>
       _getCurrentLocation();
+
+  void setFavoriteCity(City city) async {
+    data = await _getWeatherByPosition(city.lat, city.lon);
+    city.favorite = true;
+    repository.updateCity(city);
+    inEvent.add(data);
+  }
+
+  setFavoriteCityById(int id) async {
+    var city = await repository.getCityById(id);
+    if (city != null) {
+      data = await _getWeatherByPosition(city.lat, city.lon);
+      city.favorite = true;
+      repository.updateCity(city);
+      inEvent.add(data);
+    }
+  }
+
+  Future<List<City>> getSuggestions(String query) {
+    if (query != null && query.isNotEmpty) {
+      return repository.getCitiesByKeyWord(query);
+    } else {
+      return Future.value([]);
+    }
+  }
 }

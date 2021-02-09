@@ -1,4 +1,5 @@
 import 'dart:async' show Future;
+
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_weather/model/city/cities_model.dart';
 import 'package:flutter_weather/model/city/city_model.dart';

@@ -28,7 +28,8 @@ class WeatherScreenState extends State<WeatherScreen> {
     // weatherProvider.loadCitiesList();
     var currentWeatherBloc = BlocProvider.of<CurrentWeatherBloc>(context);
     currentWeatherBloc.putEvent(GetCurrentWeatherEvent());
-    load();
+    // load();
+    loadCitiesList();
   }
 
   @override

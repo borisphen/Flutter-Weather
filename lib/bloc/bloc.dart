@@ -8,7 +8,7 @@ abstract class Bloc<E, D> {
 
   final _stateController = StreamController<D>();
 
-  StreamSink<D> get _inEvent =>
+  @protected StreamSink<D> get inEvent =>
       _stateController.sink;
 
   Stream<D> get stateStream => _stateController.stream;
@@ -32,7 +32,7 @@ abstract class Bloc<E, D> {
   void mapEventToState(E event) async {
     try {
       data = await retrieveData(event);
-      _inEvent.add(data);
+      inEvent.add(data);
     } catch (e) {
 
     }

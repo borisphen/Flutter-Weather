@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/bloc/weather_state.dart';
+import 'package:flutter_weather/bloc/bloc_provider.dart';
+import 'package:flutter_weather/bloc/cities_list/cities_list_bloc.dart';
+import 'package:flutter_weather/bloc/current_weather/current_weather_bloc.dart';
 import 'package:flutter_weather/model/weather/weather_response_model.dart';
-import 'package:provider/provider.dart';
 
 class PlaceTile extends StatelessWidget {
   final WeatherResponse weather;
@@ -10,14 +11,10 @@ class PlaceTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<WeatherState>(context, listen: false);
-
+    // final appState = Provider.of<WeatherState>(context, listen: false);
+    var currentWeatherBloc = BlocProvider.of<CurrentWeatherBloc>(context);
     return ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-/*      leading: Hero(
-        tag: 'hero-${weather.id}',
-        child: Image.network(appState.getIconUrl(weather.weather[0].icon)),
-      ),*/
         trailing: IconButton(
           icon: Icon(Icons.remove),
           color: Colors.red,
@@ -31,7 +28,7 @@ class PlaceTile extends StatelessWidget {
             Hero(
               tag: '${weather.id}',
               child: Image.network(
-                appState.getIconUrl(weather.weather[0].icon),
+                currentWeatherBloc.getIconUrl(weather.weather[0].icon),
                 width: 24,
                 height: 24,
               ),
@@ -41,7 +38,7 @@ class PlaceTile extends StatelessWidget {
           ],
         ),
         onTap: () {
-          appState.setFavoriteCityById(weather.id);
+          currentWeatherBloc.setFavoriteCityById(weather.id);
           Navigator.of(context).pop();
         });
   }
@@ -55,7 +52,8 @@ class PlaceTile extends StatelessWidget {
   }
 
   showAlertDialog(BuildContext context) {
-    final appState = Provider.of<WeatherState>(context, listen: false);
+    // final appState = Provider.of<WeatherState>(context, listen: false);
+    var citiesBloc = BlocProvider.of<CitiesListBloc>(context);
     // set up the buttons
     Widget cancelButton = FlatButton(
       child: Text("Cancel"),
@@ -66,7 +64,7 @@ class PlaceTile extends StatelessWidget {
     Widget continueButton = FlatButton(
       child: Text("Yes"),
       onPressed: () async {
-        await appState.removeFavoriteCityById(weather.id);
+        await citiesBloc.removeFavoriteCityById(weather.id);
         Navigator.of(context).pop();
       },
     );

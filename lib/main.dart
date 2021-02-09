@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 
 import 'bloc/bloc_provider.dart';
 import 'bloc/theme_state.dart';
-import 'bloc/weather_state.dart';
 
 var logger = Logger();
 
@@ -22,9 +21,9 @@ void main() async {
       ChangeNotifierProvider<ThemeState>(
         create: (context) => themState,
       ),
-      ChangeNotifierProvider<WeatherState>(
-        create: (context) => WeatherState(),
-      ),
+      // ChangeNotifierProvider<WeatherState>(
+      //   create: (context) => WeatherState(),
+      // ),
     ],
     child: MyApp(),
   ));
@@ -33,21 +32,24 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeState>(builder: (context, weather, child) {
-      return MaterialApp(
-        title: 'Weather App',
-        theme: ThemeData.light(),
-        darkTheme: ThemeData.dark(),
-        themeMode: weather.getCurrentTheme(),
-        // home: MyHomePage(),
-        routes: {
-          Navigator.defaultRouteName: (context) =>
-              MyHomePage(title: "Weather App"),
-          '/finder': (context) => CitiesFinder(),
-          '/favorites': (context) => PlacesListPage(title: "Favorite Cities")
-        },
-      );
-    });
+    return BlocProvider<CurrentWeatherBloc>(
+      bloc: CurrentWeatherBloc(),
+      child: Consumer<ThemeState>(builder: (context, weather, child) {
+        return MaterialApp(
+          title: 'Weather App',
+          theme: ThemeData.light(),
+          darkTheme: ThemeData.dark(),
+          themeMode: weather.getCurrentTheme(),
+          // home: MyHomePage(),
+          routes: {
+            Navigator.defaultRouteName: (context) =>
+                MyHomePage(title: "Weather App"),
+            '/finder': (context) => CitiesFinder(),
+            '/favorites': (context) => PlacesListPage(title: "Favorite Cities")
+          },
+        );
+      }),
+    );
   }
 }
 
@@ -63,7 +65,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<ThemeState>(context, listen: false);
+    final themeState = Provider.of<ThemeState>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -97,8 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 }),
             ListTile(
               leading: Switch(
-                onChanged: (value) => {appState.switchTheme()},
-                value: appState.isLightTheme,
+                onChanged: (value) => {themeState.switchTheme()},
+                value: themeState.isLightTheme,
               ),
               title: Text('Dark/Light mode'),
             ),
@@ -106,10 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       // body: WeatherScreen(),
-      body: BlocProvider<CurrentWeatherBloc>(
-        bloc: CurrentWeatherBloc(),
-        child: WeatherScreen(),
-      ),
+      body: WeatherScreen(),
       // body: CitiesFinder(),
     );
   }
