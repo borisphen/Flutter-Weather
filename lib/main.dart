@@ -1,14 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_weather/redux/redusers/CurrentWeatherReducer.dart';
+import 'package:flutter_weather/redux/state/AppState.dart';
+import 'package:flutter_weather/redux/state/CurrentWeatherState.dart';
 import 'package:flutter_weather/ui/cities_finder.dart';
 import 'package:flutter_weather/ui/places_list.dart';
 import 'package:flutter_weather/ui/weather_screen.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+import 'package:redux/redux.dart';
 
 import 'bloc/theme_state.dart';
 import 'bloc/weather_state.dart';
 
 var logger = Logger();
+
+class Routes {
+  static final finder = '/finder';
+  static final favorites = '/favorites';
+}
+
+class Keys {
+  static final navKey = new GlobalKey<NavigatorState>();
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,23 +42,34 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  final store = Store<CurrentWeatherState>(
+    currentWeatherReducer,
+      initialState: new CurrentWeatherState.initial(),
+      // middleware: [thunkMiddleware]
+  );
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeState>(builder: (context, weather, child) {
-      return MaterialApp(
-        title: 'Weather App',
-        theme: ThemeData.light(),
-        darkTheme: ThemeData.dark(),
-        themeMode: weather.getCurrentTheme(),
-        // home: MyHomePage(),
-        routes: {
-          Navigator.defaultRouteName: (context) =>
-              MyHomePage(title: "Weather App"),
-          '/finder': (context) => CitiesFinder(),
-          '/favorites': (context) => PlacesListPage(title: "Favorite Cities")
-        },
+    // return Consumer<ThemeState>(builder: (context, weather, child) {
+      return StoreProvider<AppState>(
+        store: store,
+        child: MaterialApp(
+          title: 'Weather App',
+          theme: ThemeData.light(),
+          darkTheme: ThemeData.dark(),
+          themeMode: weather.getCurrentTheme(),
+          // home: MyHomePage(),
+          routes: {
+            Navigator.defaultRouteName: (context) =>
+                MyHomePage(title: "Weather App"),
+            Routes.finder: (context) => CitiesFinder(),
+            Routes.favorites: (context) => PlacesListPage(title: "Favorite "
+                "Cities")
+          },
+          navigatorKey: Keys.navKey,
+        ),
       );
-    });
+    // });
   }
 }
 
@@ -83,14 +108,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 title: Text('Add city'),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, '/finder');
+                  Navigator.pushNamed(context, Routes.finder);
                 }),
             ListTile(
                 leading: Icon(Icons.list),
                 title: Text('Cities management'),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, '/favorites');
+                  Navigator.pushNamed(context, Routes.favorites);
                 }),
             ListTile(
               leading: Switch(
