@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_weather/bloc/weather_state.dart';
 import 'package:flutter_weather/model/one_call/OneCallResponse.dart';
+import 'package:flutter_weather/redux/state/AppState.dart';
 import 'package:provider/provider.dart';
 
 import '../week_day_tile.dart';
@@ -10,8 +12,10 @@ class Forecast extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<WeatherState>(context, listen: false);
-    var lat = appState.weatherResponse.coord.lat;
-    var lon = appState.weatherResponse.coord.lon;
+    var weatherResponse = StoreProvider.of<AppState>(context).state
+        .currentWeatherState.weatherResponse;
+    var lat = weatherResponse.coord.lat;
+    var lon = weatherResponse.coord.lon;
     Future<OneCallResponse> onCallFuture =
         appState.getOneCallResponse(lat, lon);
     return Container(

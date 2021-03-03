@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_weather/bloc/weather_state.dart';
+import 'package:flutter_weather/redux/state/AppState.dart';
 import 'package:flutter_weather/ui/weather_screen/vertical_divider.dart';
 import 'package:provider/provider.dart';
+import 'package:redux/redux.dart';
 
 class Coordinates extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final coord =
-        Provider.of<WeatherState>(context, listen: false).weatherResponse.coord;
+    var weatherResponse = StoreProvider.of<AppState>(context).state
+        .currentWeatherState.weatherResponse;
+    final coord = weatherResponse.coord;
     return Column(
       children: <Widget>[
         Container(

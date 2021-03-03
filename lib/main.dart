@@ -5,10 +5,11 @@ import 'package:flutter_weather/redux/state/AppState.dart';
 import 'package:flutter_weather/redux/state/CurrentWeatherState.dart';
 import 'package:flutter_weather/ui/cities_finder.dart';
 import 'package:flutter_weather/ui/places_list.dart';
-import 'package:flutter_weather/ui/weather_screen.dart';
+import 'package:flutter_weather/ui/weather_screen/weather_screen.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:redux/redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
 import 'bloc/theme_state.dart';
 import 'bloc/weather_state.dart';
@@ -42,15 +43,15 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final store = Store<CurrentWeatherState>(
-    currentWeatherReducer,
-      initialState: new CurrentWeatherState.initial(),
-      // middleware: [thunkMiddleware]
+  final store = Store<AppState>(
+      appReducer,
+      initialState: new AppState.initial(),
+      middleware: [thunkMiddleware]
   );
 
   @override
   Widget build(BuildContext context) {
-    // return Consumer<ThemeState>(builder: (context, weather, child) {
+    return Consumer<ThemeState>(builder: (context, weather, child) {
       return StoreProvider<AppState>(
         store: store,
         child: MaterialApp(
@@ -69,7 +70,7 @@ class MyApp extends StatelessWidget {
           navigatorKey: Keys.navKey,
         ),
       );
-    // });
+    });
   }
 }
 

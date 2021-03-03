@@ -1,33 +1,38 @@
 import 'package:flutter_weather/bloc/weather_state.dart';
 import 'package:flutter_weather/redux/actions/CurrentWeatherActions.dart';
 import 'package:flutter_weather/redux/state/AppState.dart';
-import 'package:flutter_weather/redux/state/CurrentWeatherState.dart';
+import 'package:flutter_weather/redux/state/AppState.dart';
 import 'package:redux/redux.dart';
 
 
 
-  final currentWeatherReducer = combineReducers<CurrentWeatherState>([
-    TypedReducer<CurrentWeatherState, WeatherResponseAction>(
+  final appReducer = combineReducers<AppState>([
+    TypedReducer<AppState, WeatherResponseAction>(
         _weatherResponseReceived),
-    TypedReducer<CurrentWeatherState, WeatherErrorAction>(_weatherError),
-    TypedReducer<CurrentWeatherState, StartLoadingAction>(_startLoading),
+    TypedReducer<AppState, WeatherErrorAction>(_weatherError),
+    TypedReducer<AppState, StartLoadingAction>(_startLoading),
   ]);
 
 
-CurrentWeatherState _weatherResponseReceived(CurrentWeatherState state,
+AppState _weatherResponseReceived(AppState state,
     WeatherResponseAction action) {
-  return state.copyWith(weatherResponse: action.weatherResponse,
+  var newWeatherState = state.currentWeatherState.copyWith(weatherResponse: action
+      .weatherResponse,
       isLoading: false,
       loginError: false);
+  return state.copyWith(currentWeatherState: newWeatherState);
 }
 
-CurrentWeatherState _weatherError(CurrentWeatherState state,
+AppState _weatherError(AppState state,
     WeatherErrorAction action) {
-  return state.copyWith(
+  var newWeatherState =  state.currentWeatherState.copyWith(
       weatherResponse: null, isLoading: false, loginError: true);
+  return state.copyWith(currentWeatherState: newWeatherState);
 }
 
-CurrentWeatherState _startLoading(CurrentWeatherState state,
+AppState _startLoading(AppState state,
     StartLoadingAction action) {
-  return state.copyWith(isLoading: true, loginError: false);
+  var newWeatherState =  state
+    .currentWeatherState.copyWith(isLoading: true, loginError: false);
+  return state.copyWith(currentWeatherState: newWeatherState);
 }

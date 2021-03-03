@@ -1,14 +1,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_weather/bloc/weather_state.dart';
+import 'package:flutter_weather/redux/state/AppState.dart';
 import 'package:provider/provider.dart';
 
 class MainWeatherData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<WeatherState>(context, listen: false);
-    var weatherResponse = appState.weatherResponse;
+    var weatherResponse = StoreProvider.of<AppState>(context).state
+        .currentWeatherState.weatherResponse;
     var weather = weatherResponse.weather[0];
     var main = weatherResponse.main;
     return Column(
