@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:flutter_weather/redux/redusers/CurrentWeatherReducer.dart';
+import 'package:flutter_weather/redux/redusers/app_reducers.dart';
 import 'package:flutter_weather/redux/state/AppState.dart';
-import 'package:flutter_weather/redux/state/CurrentWeatherState.dart';
 import 'package:flutter_weather/ui/cities_finder.dart';
 import 'package:flutter_weather/ui/places_list.dart';
 import 'package:flutter_weather/ui/weather_screen/weather_screen.dart';

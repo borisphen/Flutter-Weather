@@ -54,26 +54,21 @@ class WeatherScreenState extends State<WeatherScreen> {
     return StoreConnector<AppState, WeatherViewModel>(
       onInit: (store) => store.dispatch(getCurrentWeather()),
         converter: (store) => WeatherViewModel.fromStore(store),
-        builder: (_, viewModel) => getScreen(viewModel.weatherResponse),
+        builder: (_, viewModel) => getScreen(viewModel),
+        distinct: true,
         onDidChange: (viewModel) {
-          if (viewModel.loginError) {
-            // showLoginError();
-          } else if (viewModel.isLoading) {
-            Center(child: CircularProgressIndicator());
-          }
-          //   return _buildWeatherScreen(weather.weatherResponse);
-          // } else {
-          //   return Center(child: CircularProgressIndicator());
-          // }
+          return getScreen(viewModel);
         });
   }
 
-  Widget getScreen(WeatherResponse weatherResponse) {
-    if (weatherResponse == null) {
+  Widget getScreen(WeatherViewModel weatherViewModel) {
+    if (weatherViewModel.isLoading) {
       return Center(child: CircularProgressIndicator());
-    } else {
-      return _buildWeatherScreen(weatherResponse);
     }
+    if (weatherViewModel.loginError) {
+
+    }
+    return _buildWeatherScreen(weatherViewModel.weatherResponse);
   }
 
   SingleChildScrollView _buildWeatherScreen(WeatherResponse data) {
