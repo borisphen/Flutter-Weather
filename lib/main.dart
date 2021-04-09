@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_weather/persistance/repository.dart';
+import 'package:flutter_weather/providers/repository_provider.dart';
 import 'package:flutter_weather/ui/cities_finder.dart';
 import 'package:flutter_weather/ui/places_list.dart';
 import 'package:flutter_weather/ui/weather_screen.dart';
 import 'package:logger/logger.dart';
-import 'package:provider/provider.dart';
 
 import 'bloc/theme_state.dart';
 import 'bloc/weather_state.dart';
@@ -14,14 +16,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var themState = ThemeState();
   await themState.initTheme();
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider<ThemeState>(
-        create: (context) => themState,
-      ),
-      ChangeNotifierProvider<WeatherState>(
-        create: (context) => WeatherState(),
-      ),
+  runApp(ProviderScope(
+    overrides: [
+      // ChangeNotifierProvider<ThemeState>(
+      //   create: (context) => themState,
+      // ),
+      // StateNotifierProvider<WeatherState, WeatherResponse>((ref) {
+      //   return WeatherState();
+      // }),
+      repositoryProvider.overrideWithValue(Repository());
     ],
     child: MyApp(),
   ));

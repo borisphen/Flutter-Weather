@@ -23,16 +23,17 @@ environment:
 dependencies:
   geolocator: ^5.3.1
   http: ^0.12.0+2
-  rxdart: ^0.22.0
-  intl: ^0.15.8
+  intl: ^0.17.0
   flutter:
     sdk: flutter
-  provider: ^4.3.2+2
+#  provider: ^4.3.2+2
   shared_preferences: ^0.5.12+4
   flutter_typeahead: ^1.9.1
   sqflite:
   path:
   logger: ^0.9.4
+  flutter_riverpod: ^0.14.0+1
+
 
 
   # The following adds the Cupertino Icons font to your application.
