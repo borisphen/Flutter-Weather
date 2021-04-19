@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_weather/bloc/weather_bloc.dart';
 import 'package:flutter_weather/bloc/weather_state.dart';
 import 'package:flutter_weather/model/weather/weather_response_model.dart';
@@ -9,7 +10,6 @@ import 'package:flutter_weather/ui/weather_screen/forecast.dart';
 import 'package:flutter_weather/ui/weather_screen/main_weather_data.dart';
 import 'package:flutter_weather/ui/weather_screen/sys_info.dart';
 import 'package:flutter_weather/ui/weather_screen/wind_info.dart';
-import 'package:provider/provider.dart';
 
 class WeatherScreen extends StatefulWidget {
   @override

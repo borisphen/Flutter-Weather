@@ -1,17 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_weather/bloc/weather_state.dart';
 import 'package:flutter_weather/model/one_call/OneCallResponse.dart';
+import 'package:flutter_weather/providers/weather_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../week_day_tile.dart';
 
-class Forecast extends StatelessWidget {
+class Forecast extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    final appState = Provider.of<WeatherState>(context, listen: false);
-    var lat = appState.weatherResponse.coord.lat;
-    var lon = appState.weatherResponse.coord.lon;
+  Widget build(BuildContext context, ScopedReader watch) {
+    final weatherResponse = watch(weatherViewModelProvider).weatherResponse;
+    var lat = weatherResponse.coord.lat;
+    var lon = weatherResponse.coord.lon;
     Future<OneCallResponse> onCallFuture =
         appState.getOneCallResponse(lat, lon);
     return Container(

@@ -10,16 +10,14 @@ import 'current_weather_state.dart';
 
 final weatherViewModelProvider = StateNotifierProvider<WeatherViewModel, CurrentWeatherState>((ref) {
   final Repository repository = ref.watch(repositoryProvider);
-  return WeatherViewModel(CurrentWeatherState.initial(), repository);
+  return WeatherViewModel(repository);
 });
 
 class WeatherViewModel extends StateNotifier<CurrentWeatherState> {
   final Repository _repository;
 
-  CurrentWeatherState currentWeatherState;
-
-  WeatherViewModel(this.currentWeatherState, this._repository)
-      : super(null);
+  WeatherViewModel(this._repository)
+      : super(CurrentWeatherState.initial());
 
   getCurrentLocation() async {
     if (kIsWeb) {
@@ -27,7 +25,7 @@ class WeatherViewModel extends StateNotifier<CurrentWeatherState> {
           await _repository.getWebLocation();
       WeatherResponse weatherResponse = await _getWeatherByPosition(
           webLocationResponse.latitude, webLocationResponse.longitude);
-      state = currentWeatherState.copyWith(weatherResponse: weatherResponse);
+      state = state.copyWith(weatherResponse: weatherResponse);
     } else {
       final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
       geolocator
@@ -35,7 +33,7 @@ class WeatherViewModel extends StateNotifier<CurrentWeatherState> {
           .then((Position position) async {
         WeatherResponse weatherResponse =
         await _getWeatherByPosition(position.latitude, position.longitude);
-        state = currentWeatherState.copyWith(weatherResponse: weatherResponse);
+        state = state.copyWith(weatherResponse: weatherResponse);
       });
     }
   }
@@ -45,6 +43,6 @@ class WeatherViewModel extends StateNotifier<CurrentWeatherState> {
   }
 
   setIsLoading(bool isLoading) {
-    state = currentWeatherState.copyWith(isLoading: isLoading);
+    state = state.copyWith(isLoading: isLoading);
   }
 }

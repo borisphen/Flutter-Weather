@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_weather/persistance/prefs_provider.dart';
 import 'package:flutter_weather/persistance/repository.dart';
 import 'package:flutter_weather/providers/repository_provider.dart';
+import 'package:flutter_weather/providers/theme_view_model.dart';
 import 'package:flutter_weather/ui/cities_finder.dart';
 import 'package:flutter_weather/ui/places_list.dart';
 import 'package:flutter_weather/ui/weather_screen.dart';
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bloc/theme_state.dart';
-import 'bloc/weather_state.dart';
 
 var logger = Logger();
 
@@ -16,6 +18,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var themState = ThemeState();
   await themState.initTheme();
+  final sharedPreferences = await SharedPreferences.getInstance();
   runApp(ProviderScope(
     overrides: [
       // ChangeNotifierProvider<ThemeState>(
@@ -24,21 +27,22 @@ void main() async {
       // StateNotifierProvider<WeatherState, WeatherResponse>((ref) {
       //   return WeatherState();
       // }),
-      repositoryProvider.overrideWithValue(Repository());
+      repositoryProvider.overrideWithValue(Repository()),
+      sharedPreferencesProvider.overrideWithValue(PrefsProvider(sharedPreferences)),
     ],
     child: MyApp(),
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget  {
   @override
-  Widget build(BuildContext context) {
-    return Consumer<ThemeState>(builder: (context, weather, child) {
+  Widget build(BuildContext context, ScopedReader watch) {
+    var themeViewModel = watch(themeViewModelProvider.notifier);
       return MaterialApp(
         title: 'Weather App',
         theme: ThemeData.light(),
         darkTheme: ThemeData.dark(),
-        themeMode: weather.getCurrentTheme(),
+        themeMode: themeViewModel.getCurrentTheme(),
         // home: MyHomePage(),
         routes: {
           Navigator.defaultRouteName: (context) =>
@@ -47,26 +51,21 @@ class MyApp extends StatelessWidget {
           '/favorites': (context) => PlacesListPage(title: "Favorite Cities")
         },
       );
-    });
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends ConsumerWidget {
   final String title;
 
   MyHomePage({Key key, this.title}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    final appState = Provider.of<ThemeState>(context, listen: false);
+  Widget build(BuildContext context, ScopedReader watch) {
+    // final appState = Provider.of<ThemeState>(context, listen: false);
+    var themeViewModel = watch(themeViewModelProvider.notifier);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(title),
       ),
       drawer: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
@@ -97,8 +96,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 }),
             ListTile(
               leading: Switch(
-                onChanged: (value) => {appState.switchTheme()},
-                value: appState.isLightTheme,
+                onChanged: (value) => {themeViewModel.switchTheme()},
+                value: themeViewModel.state.isLightTheme,
               ),
               title: Text('Dark/Light mode'),
             ),

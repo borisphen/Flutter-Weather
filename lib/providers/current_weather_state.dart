@@ -4,14 +4,14 @@ import 'package:flutter_weather/model/weather/weather_response_model.dart';
 @immutable
 class CurrentWeatherState {
   final bool isLoading;
-  final bool loginError;
+  final bool gotError;
   final WeatherResponse weatherResponse;
 
-  CurrentWeatherState({@required this.isLoading, @required this.loginError, @required this
+  CurrentWeatherState({@required this.isLoading, @required this.gotError, @required this
       .weatherResponse});
 
   factory CurrentWeatherState.initial() {
-    return new CurrentWeatherState(isLoading: false, loginError: false, weatherResponse: null);
+    return new CurrentWeatherState(isLoading: false, gotError: false, weatherResponse: null);
   }
 
   @override
@@ -20,12 +20,12 @@ class CurrentWeatherState {
           other is CurrentWeatherState &&
               runtimeType == other.runtimeType &&
               isLoading == other.isLoading &&
-              loginError == other.loginError &&
+              gotError == other.gotError &&
               weatherResponse == other.weatherResponse;
 
   @override
   int get hashCode =>
-      isLoading.hashCode ^ loginError.hashCode ^ weatherResponse.hashCode;
+      isLoading.hashCode ^ gotError.hashCode ^ weatherResponse.hashCode;
 
   CurrentWeatherState copyWith({
     bool isLoading,
@@ -33,7 +33,7 @@ class CurrentWeatherState {
     WeatherResponse weatherResponse,
   }) {
     if ((isLoading == null || identical(isLoading, this.isLoading)) &&
-        (loginError == null || identical(loginError, this.loginError)) &&
+        (loginError == null || identical(loginError, this.gotError)) &&
         (weatherResponse == null ||
             identical(weatherResponse, this.weatherResponse))) {
       return this;
@@ -41,7 +41,7 @@ class CurrentWeatherState {
 
     return new CurrentWeatherState(
       isLoading: isLoading ?? this.isLoading,
-      loginError: loginError ?? this.loginError,
+      gotError: loginError ?? this.gotError,
       weatherResponse: weatherResponse ?? this.weatherResponse,
     );
   }

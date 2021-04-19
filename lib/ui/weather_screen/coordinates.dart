@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_weather/bloc/weather_state.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_weather/providers/weather_view_model.dart';
 import 'package:flutter_weather/ui/weather_screen/vertical_divider.dart';
-import 'package:provider/provider.dart';
 
-class Coordinates extends StatelessWidget {
+
+class Coordinates extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    final coord =
-        Provider.of<WeatherState>(context, listen: false).weatherResponse.coord;
+  Widget build(BuildContext context, ScopedReader watch) {
+    final weatherResponse = watch(weatherViewModelProvider).weatherResponse;
+    final coord = weatherResponse.coord;
     return Column(
       children: <Widget>[
         Container(
