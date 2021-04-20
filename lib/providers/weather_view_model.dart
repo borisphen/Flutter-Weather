@@ -45,4 +45,11 @@ class WeatherViewModel extends StateNotifier<CurrentWeatherState> {
   setIsLoading(bool isLoading) {
     state = state.copyWith(isLoading: isLoading);
   }
+
+  setFavoriteCity(City city) async {
+    final weatherResponse = await _getWeatherByPosition(city.lat, city.lon);
+    city.favorite = true;
+    _repository.updateCity(city);
+    notifyListeners();
+  }
 }

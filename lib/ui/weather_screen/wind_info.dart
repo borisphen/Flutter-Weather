@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_weather/bloc/weather_state.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_weather/providers/weather_view_model.dart';
 import 'package:flutter_weather/ui/weather_screen/vertical_divider.dart';
-import 'package:provider/provider.dart';
 
-class WindInfo extends StatelessWidget {
+class WindInfo extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    final wind = Provider.of<WeatherState>(context, listen: false).weatherResponse.wind;
+  Widget build(BuildContext context, ScopedReader watch) {
+    final weatherResponse = watch(weatherViewModelProvider).weatherResponse;
+    final wind = weatherResponse.wind;
     return Column(
       children: <Widget>[
         Container(

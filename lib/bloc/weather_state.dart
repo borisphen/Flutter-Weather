@@ -29,33 +29,33 @@ class WeatherState extends StateNotifier<WeatherResponse> {
   //   }
   // }
   //
-  // Future<WeatherResponse> _getWeatherByPosition(double lat, double lon) async {
-  //   return _repository.fetchWeatherByLocation(lat, lon);
+  Future<WeatherResponse> _getWeatherByPosition(double lat, double lon) async {
+    return _repository.fetchWeatherByLocation(lat, lon);
+  }
+
+  // setFavoriteCity(City city) async {
+  //   weatherResponse = await _getWeatherByPosition(city.lat, city.lon);
+  //   city.favorite = true;
+  //   _repository.updateCity(city);
+  //   notifyListeners();
   // }
 
-  setFavoriteCity(City city) async {
-    weatherResponse = await _getWeatherByPosition(city.lat, city.lon);
-    city.favorite = true;
-    _repository.updateCity(city);
-    notifyListeners();
-  }
+  // setFavoriteCityById(int id) async {
+  //   var city = await _repository.getCityById(id);
+  //   if (city != null) {
+  //     weatherResponse = await _getWeatherByPosition(city.lat, city.lon);
+  //     city.favorite = true;
+  //     _repository.updateCity(city);
+  //     notifyListeners();
+  //   }
+  // }
 
-  setFavoriteCityById(int id) async {
-    var city = await _repository.getCityById(id);
-    if (city != null) {
-      weatherResponse = await _getWeatherByPosition(city.lat, city.lon);
-      city.favorite = true;
-      _repository.updateCity(city);
-      notifyListeners();
-    }
-  }
-
-  removeFavoriteCity(City city) async {
-    weatherResponse = await _getWeatherByPosition(city.lat, city.lon);
-    city.favorite = false;
-    _repository.updateCity(city);
-    notifyListeners();
-  }
+  // removeFavoriteCity(City city) async {
+  //   weatherResponse = await _getWeatherByPosition(city.lat, city.lon);
+  //   city.favorite = false;
+  //   _repository.updateCity(city);
+  //   notifyListeners();
+  // }
 
   loadCitiesList() async {
     bool isDbHasCities = await _repository.isCityTableNotEmpty();
