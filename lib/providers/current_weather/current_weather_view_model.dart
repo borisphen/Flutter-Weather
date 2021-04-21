@@ -2,21 +2,22 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_weather/model/weather/weather_response_model.dart';
 import 'package:flutter_weather/model/web/location/WebLocationResponse.dart';
+import 'package:flutter_weather/persistance/model/city.dart';
 import 'package:flutter_weather/persistance/repository.dart';
 import 'package:flutter_weather/providers/repository_provider.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'current_weather_state.dart';
 
-final weatherViewModelProvider = StateNotifierProvider<WeatherViewModel, CurrentWeatherState>((ref) {
+final currentWeatherViewModelProvider = StateNotifierProvider<CurrentWeatherViewModel, CurrentWeatherState>((ref) {
   final Repository repository = ref.watch(repositoryProvider);
-  return WeatherViewModel(repository);
+  return CurrentWeatherViewModel(repository);
 });
 
-class WeatherViewModel extends StateNotifier<CurrentWeatherState> {
+class CurrentWeatherViewModel extends StateNotifier<CurrentWeatherState> {
   final Repository _repository;
 
-  WeatherViewModel(this._repository)
+  CurrentWeatherViewModel(this._repository)
       : super(CurrentWeatherState.initial());
 
   getCurrentLocation() async {
@@ -47,9 +48,11 @@ class WeatherViewModel extends StateNotifier<CurrentWeatherState> {
   }
 
   setFavoriteCity(City city) async {
-    final weatherResponse = await _getWeatherByPosition(city.lat, city.lon);
     city.favorite = true;
+    final weatherResponse = await _getWeatherByPosition(city.lat, city.lon);
+    state = state.copyWith(weatherResponse: weatherResponse);
     _repository.updateCity(city);
-    notifyListeners();
   }
+
+  String getIconUrl(String icon) => _repository.getIconUrl(icon);
 }

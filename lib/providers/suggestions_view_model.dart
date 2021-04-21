@@ -22,11 +22,4 @@ class SuggestionsViewModel extends StateNotifier<List<City>> {
     }
     return state;
   }
-
-  Future<List<CityModel>> getCitiesList() => _repository.loadCitiesList();
-
-  Future<bool> isCityTableNotEmpty() => _repository.isCityTableNotEmpty();
-
-  Future<List<City>> getFavoriteCities() => _repository.getFavoriteCities();
-
 }

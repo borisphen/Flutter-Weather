@@ -3,12 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_weather/persistance/prefs_provider.dart';
 import 'package:flutter_weather/persistance/repository.dart';
 import 'package:flutter_weather/providers/repository_provider.dart';
-import 'package:flutter_weather/providers/theme_view_model.dart';
 import 'package:flutter_weather/ui/cities_finder.dart';
 import 'package:flutter_weather/ui/places_list.dart';
 import 'package:flutter_weather/ui/weather_screen.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'file:///D:/Bender/Development/Projects/flutter_weather/lib/providers/theme/theme_view_model.dart';
 
 import 'bloc/theme_state.dart';
 

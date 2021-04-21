@@ -2,14 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_weather/bloc/weather_state.dart';
-import 'package:flutter_weather/providers/weather_view_model.dart';
-import 'package:provider/provider.dart';
+
+import 'file:///D:/Bender/Development/Projects/flutter_weather/lib/providers/current_weather/current_weather_view_model.dart';
 
 class MainWeatherData extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final weatherResponse = watch(weatherViewModelProvider).weatherResponse;
+    final currentWeatherViewModel = watch(currentWeatherViewModelProvider.notifier);
+    final weatherResponse = watch(currentWeatherViewModelProvider).weatherResponse;
     var weather = weatherResponse.weather[0];
     var main = weatherResponse.main;
     return Column(
@@ -29,7 +29,7 @@ class MainWeatherData extends ConsumerWidget {
                 margin: const EdgeInsets.only(right: 4.0),
                 child: Hero(
                     tag: '${weatherResponse.id}',
-                    child: Image.network(appState.getIconUrl(weather.icon)))),
+                    child: Image.network(currentWeatherViewModel.getIconUrl(weather.icon)))),
             Text("Temperature: " + weatherResponse.main.temp.toString()),
           ],
         ),

@@ -1,21 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_weather/bloc/weather_state.dart';
 import 'package:flutter_weather/model/one_call/OneCallResponse.dart';
-import 'package:flutter_weather/providers/weather_view_model.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_weather/providers/forecast_view_model.dart';
+
+import 'file:///D:/Bender/Development/Projects/flutter_weather/lib/providers/current_weather/current_weather_view_model.dart';
 
 import '../week_day_tile.dart';
 
 class Forecast extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final weatherResponse = watch(weatherViewModelProvider).weatherResponse;
+    final weatherResponse = watch(currentWeatherViewModelProvider).weatherResponse;
     var lat = weatherResponse.coord.lat;
     var lon = weatherResponse.coord.lon;
-    Future<OneCallResponse> onCallFuture =
-        appState.getOneCallResponse(lat, lon);
+    final onCallFuture = watch(forecastProvider.notifier).getOneCallResponse(lat, lon);
     return Container(
       margin: const EdgeInsets.only(top: 16.0),
       child: Column(

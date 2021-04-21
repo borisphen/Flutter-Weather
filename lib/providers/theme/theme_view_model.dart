@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_weather/persistance/prefs_provider.dart';
-import 'package:flutter_weather/providers/current_theme_state.dart';
+
+import 'file:///D:/Bender/Development/Projects/flutter_weather/lib/providers/theme/current_theme_state.dart';
 
 final themeViewModelProvider = StateNotifierProvider<ThemeViewModel, CurrentThemeState>((ref) {
   final PrefsProvider prefsProvider = ref.watch(sharedPreferencesProvider);

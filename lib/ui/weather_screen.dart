@@ -5,6 +5,7 @@ import 'package:flutter_weather/bloc/weather_bloc.dart';
 import 'package:flutter_weather/bloc/weather_state.dart';
 import 'package:flutter_weather/model/weather/weather_response_model.dart';
 import 'package:flutter_weather/persistance/repository.dart';
+import 'package:flutter_weather/providers/current_weather/current_weather_view_model.dart';
 import 'package:flutter_weather/ui/weather_screen/coordinates.dart';
 import 'package:flutter_weather/ui/weather_screen/forecast.dart';
 import 'package:flutter_weather/ui/weather_screen/main_weather_data.dart';
@@ -12,11 +13,21 @@ import 'package:flutter_weather/ui/weather_screen/sys_info.dart';
 import 'package:flutter_weather/ui/weather_screen/wind_info.dart';
 
 class WeatherScreen extends StatefulWidget {
+
   @override
-  WeatherScreenState createState() => WeatherScreenState();
+  WeatherScreenState createState() => WeatherScreenState(watch);
+
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
 }
 
 class WeatherScreenState extends State<WeatherScreen> {
+  ScopedReader watch;
+
+  WeatherScreenState(this.watch);
 
   @override
   void initState() {
@@ -35,9 +46,10 @@ class WeatherScreenState extends State<WeatherScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<WeatherState>(builder: (context, weather, child) {
-      if (weather.weatherResponse != null) {
-        return _buildWeatherScreen(weather.weatherResponse);
+    return Consumer(builder: (context, watch, child) {
+      final weatherResponse = watch(currentWeatherViewModelProvider).weatherResponse;
+      if (weatherResponse != null) {
+        return _buildWeatherScreen(weatherResponse);
       } else {
         return Center(child: CircularProgressIndicator());
       }

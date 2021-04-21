@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:flutter_weather/bloc/weather_state.dart';
 import 'package:flutter_weather/persistance/model/city.dart';
-import 'package:flutter_weather/providers/cities_assets_view_model.dart';
+import 'package:flutter_weather/providers/favorite_city_view_model.dart';
 import 'package:flutter_weather/providers/suggestions_view_model.dart';
 
 class CitiesFinder extends StatefulWidget {
@@ -23,12 +22,10 @@ class _CitiesFinderState extends State<CitiesFinder> {
 
   @override
   Widget build(BuildContext context) {
-    // final weatherProvider = Provider.of<WeatherState>(context, listen: false);
-    // weatherProvider.loadCitiesList();
     return Consumer(
         builder: (_, ScopedReader watch, __) {
           final suggestions = watch(suggestionsProvider.notifier);
-          final citiesAssets = watch(citiesAssetsProvider.notifier);
+          final favoriteCityViewModel = watch(favoriteCityViewModelProvider.notifier);
           return Scaffold(
             appBar: AppBar(
               title: Text('City finder'),
@@ -54,7 +51,7 @@ class _CitiesFinderState extends State<CitiesFinder> {
                   },
                   onSuggestionSelected: (suggestion) {
                     this._typeAheadController.text = (suggestion as City).name;
-                    weatherProvider.setFavoriteCity(suggestion);
+                    favoriteCityViewModel.setFavoriteCity(suggestion);
                     Navigator.of(context).pop();
                   }),
             ),
